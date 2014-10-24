@@ -1,0 +1,224 @@
+@import url("http://fonts.googleapis.com/css?family=Oxygen:400,300,700");
+
+$mainFont: "Inconsolata", helvetica, sans-serif;
+$primaryColor : #10FFCB;
+$secondaryColor : #2195CC;
+$highlightColor : #FF6350;
+$wrapperWidthDesktop : 70%;
+$wrapperWidthTablet : 80%;
+$wrapperWidthPhone : 95%;
+$marginSize : 2%;
+
+.bgProperty {
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover; -webkit-background-size: cover;
+	background-attachment: fixed;	
+}
+
+* {
+	font-family: $mainFont;
+	font-size: 20px;
+}
+html {
+	height: 100%;
+}
+body {
+	@extend .bgProperty;
+	padding: 0;
+	margin: 0;
+	height: 100%;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;	
+}
+
+.hidden {
+	display: none;
+}
+#filter {
+	background-image: url(../images/pattern.png);
+	background-attachment: fixed;	
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-repeat: repeat;
+	height: auto;
+}
+
+.clear {
+	clear: both;
+	padding-top: 2%;
+}
+hr.clear {
+	padding: 0;
+	margin: 2%;
+}
+
+#wrapper {
+	max-width: 60%;
+	height: auto;
+	margin: 0 auto;
+	background-color: rgba(255,255,255, 0.7);
+
+	// GENERAL STYLING
+	h1 {
+		margin: $marginSize;
+		margin-top: 50px;
+		color: $secondaryColor;
+		font-size: 2em;
+	}
+	>p {
+		margin: $marginSize;
+	}
+	>p#credits {
+		font-size: .5em;
+		padding-top: 20px;
+		padding-bottom: 20px;
+	}
+	ul {
+		list-style: none;
+		margin: $marginSize;
+		padding: $marginSize;
+	}
+	li {
+		padding: 0;
+		margin-bottom: 10px;
+	}
+
+	.textHighlight {
+		color: $highlightColor;
+		font-weight: 700;
+	}
+
+	// NAV STYLING
+	nav {
+		padding: 2%;
+		background-color: $secondaryColor;
+		border-bottom: 4px solid $primaryColor;
+
+		h1 {
+			color: $highlightColor;
+			display: inline-block;
+			font-size: 1.3em;
+			margin: 0;
+			padding: 0;
+		}
+		.menuItem {
+			display: inline-block;
+			margin-right: 2%;
+
+			a {
+				position: relative;
+				display: inline-block;
+				margin: 2%;
+				padding: .5em 1em;
+				border-radius: 5px;  
+				box-shadow: 1px 1px 2px silver;
+				background-color: $highlightColor;  
+				border: 1px solid $highlightColor;
+				color: white;  
+				text-decoration: none;  
+				
+				
+			}
+			a:hover {
+				cursor: pointer;  
+				border: 1px solid $primaryColor;
+			}
+		}
+	}
+
+	// INPUT FIELDS
+	.controlInput {
+		background-color: #FF6350;
+		font-size: .8em;
+		padding: 2%;
+		margin: 2%;
+		border: none;
+		border-radius: 5px;
+		color: white;
+		appearance: none;
+		-webkit-appearance: none;
+	}
+	.controlInput:hover {
+		cursor: pointer;
+		background-color: #2195CC;
+	}
+	select.controlInput {
+		background: url(../images/drop-down-arrow.png) no-repeat right #FF6350;
+		background-size: auto 80%;
+		padding-right: 6%;
+	}
+
+	.controlInput#gameField {
+		width: 30%;
+	}
+	.controlInput#displayType {
+		width: 17%;
+	}
+	.controlInput#sortType {
+		width: 17%;
+	}
+	.controlInput#submitVal {
+		width: 17%;
+	}
+
+	#currentGamesField {
+		margin: 2%;
+	}
+	#currentGamesField .active {
+		color: $highlightColor;
+	}
+}
+
+// Tablet
+@media screen  and (max-width : 768px) {
+	#wrapper {
+		max-width: 80%;
+
+		nav .menuItem a,
+		.controlInput {
+			font-size: .9em;
+		}
+		.controlInput#gameField {
+			width: 40%;
+		}
+		.controlInput#displayType {
+			width: 20%;
+		}
+		.controlInput#sortType {
+			width: 20%;
+		}
+		.controlInput#submitVal {
+			width: 40%;
+		}
+	}
+}
+// Phones
+@media screen  and (max-width : 480px) {
+	#wrapper {
+		max-width: 95%;
+
+		nav .menuItem a,
+		.controlInput {
+			font-size: .7em;
+		}	
+
+		.controlInput#gameField {
+			width: 95%;
+		}	
+		.controlInput#displayType {
+			width: 45%;
+		}
+		.controlInput#sortType {
+			width: 45%;
+		}
+		.controlInput#submitVal {
+			width: 45%;
+		}
+	}
+}

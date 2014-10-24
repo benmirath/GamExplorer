@@ -1,0 +1,159 @@
+@import url("http://fonts.googleapis.com/css?family=Oxygen:400,300,700");
+.bgProperty, body {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  -webkit-background-size: cover;
+  background-attachment: fixed; }
+
+* {
+  font-family: "Inconsolata", helvetica, sans-serif;
+  font-size: 20px; }
+
+html {
+  height: 100%; }
+
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0; }
+
+.hidden {
+  display: none; }
+
+#filter {
+  background-image: url(../images/pattern.png);
+  background-attachment: fixed;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-repeat: repeat;
+  height: auto; }
+
+.clear {
+  clear: both;
+  padding-top: 2%; }
+
+hr.clear {
+  padding: 0;
+  margin: 2%; }
+
+#wrapper {
+  max-width: 60%;
+  height: auto;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.7); }
+  #wrapper h1 {
+    margin: 2%;
+    margin-top: 50px;
+    color: #2195CC;
+    font-size: 2em; }
+  #wrapper > p {
+    margin: 2%; }
+  #wrapper > p#credits {
+    font-size: .5em;
+    padding-top: 20px;
+    padding-bottom: 20px; }
+  #wrapper ul {
+    list-style: none;
+    margin: 2%;
+    padding: 2%; }
+  #wrapper li {
+    padding: 0;
+    margin-bottom: 10px; }
+  #wrapper .textHighlight {
+    color: #FF6350;
+    font-weight: 700; }
+  #wrapper nav {
+    padding: 2%;
+    background-color: #2195CC;
+    border-bottom: 4px solid #10FFCB; }
+    #wrapper nav h1 {
+      color: #FF6350;
+      display: inline-block;
+      font-size: 1.3em;
+      margin: 0;
+      padding: 0; }
+    #wrapper nav .menuItem {
+      display: inline-block;
+      margin-right: 2%; }
+      #wrapper nav .menuItem a {
+        position: relative;
+        display: inline-block;
+        margin: 2%;
+        padding: .5em 1em;
+        border-radius: 5px;
+        box-shadow: 1px 1px 2px silver;
+        background-color: #FF6350;
+        border: 1px solid #FF6350;
+        color: white;
+        text-decoration: none; }
+      #wrapper nav .menuItem a:hover {
+        cursor: pointer;
+        border: 1px solid #10FFCB; }
+  #wrapper .controlInput {
+    background-color: #FF6350;
+    font-size: .8em;
+    padding: 2%;
+    margin: 2%;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    appearance: none;
+    -webkit-appearance: none; }
+  #wrapper .controlInput:hover {
+    cursor: pointer;
+    background-color: #2195CC; }
+  #wrapper select.controlInput {
+    background: url(../images/drop-down-arrow.png) no-repeat right #FF6350;
+    background-size: auto 80%;
+    padding-right: 6%; }
+  #wrapper .controlInput#gameField {
+    width: 30%; }
+  #wrapper .controlInput#displayType {
+    width: 17%; }
+  #wrapper .controlInput#sortType {
+    width: 17%; }
+  #wrapper .controlInput#submitVal {
+    width: 17%; }
+  #wrapper #currentGamesField {
+    margin: 2%; }
+  #wrapper #currentGamesField .active {
+    color: #FF6350; }
+
+@media screen and (max-width: 768px) {
+  #wrapper {
+    max-width: 80%; }
+    #wrapper nav .menuItem a,
+    #wrapper .controlInput {
+      font-size: .9em; }
+    #wrapper .controlInput#gameField {
+      width: 40%; }
+    #wrapper .controlInput#displayType {
+      width: 20%; }
+    #wrapper .controlInput#sortType {
+      width: 20%; }
+    #wrapper .controlInput#submitVal {
+      width: 40%; } }
+@media screen and (max-width: 480px) {
+  #wrapper {
+    max-width: 95%; }
+    #wrapper nav .menuItem a,
+    #wrapper .controlInput {
+      font-size: .7em; }
+    #wrapper .controlInput#gameField {
+      width: 95%; }
+    #wrapper .controlInput#displayType {
+      width: 45%; }
+    #wrapper .controlInput#sortType {
+      width: 45%; }
+    #wrapper .controlInput#submitVal {
+      width: 45%; } }
+
+/*# sourceMappingURL=style.css.map */

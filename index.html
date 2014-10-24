@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="GamExplorer, expand your library" />
+    	<meta name="author" content="Ben Miller" />
+		<title>GamExplorer</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<script src="js/libs/underscore.min.js"></script>
+		<script src="js/background.js"></script>
+		<script src="js/dataVis.js"></script>
+		<script src="js/script.js"></script>
+		<link rel="stylesheet" type="text/css" href="styles/style.css">
+	</head>
+	<body>
+		<div id="filter">
+			<div id="wrapper">
+
+				<nav>
+					<div class="menuItem"><a href="index.html">GamExplorer</a></div>
+					<div class="menuItem"><a href="examples.html">Examples</a></div>
+					<div class="menuItem"><a href="about.html">About</a></div>				
+				</nav>
+				<h1 class="clear">GamExplorer</h1>
+				<p>At a loss for what game to play next? Try out this tool by inputting different games below to gain a new perspective on your tastes! As you add a new game, it is compared to all previous entries, by one of several factors. These so far include the gameplay genre, story themes, or mechnaical concepts featured in each game.</p>
+				<select class="controlInput" id="gameField" name="gameOption">
+					<option>Select a Game</option>
+					<option>Cave Story</option>
+					<option>Thomas was Alone</option>
+					<option>Transistor</option>
+					<option>Bastion</option>
+					<option>Valdis Story: Abbysal City</option>
+					<option>The Last of Us</option>
+					<option>Uncharted 3</option>
+					<option>Dark Souls</option>
+					<option>Dark Souls 2</option>
+					<option>The Elder Scrolls V: Skyrim</option>
+					<option>Zelda: A Link Between Worlds</option>
+				</select>
+				<select class="controlInput" id="sortType" name="sortOption">
+					<option>Genre</option>
+					<option>Themes</option>
+					<option>Concepts</option>
+				</select>
+				<select class="controlInput" id="displayType" name="sortOption">
+					<option>List</option>
+					<option>Chart</option>
+				</select>
+				<input class="controlInput" id="submitVal" type="submit" value="Display">
+				
+
+				<div class="hidden">
+					<hr class="clear"/>
+					<div id="currentGamesField"></div>
+					<div id="resultField"></div>
+				</div>
+				<p class="clear footerText" id="credits"><em>powered by the <a href="http://www.giantbomb.com/api">www.giantbomb.com/api</a></em></p>
+				<div id="svg"></div>
+			</div>
+		</div>
+	</body>
+</html>

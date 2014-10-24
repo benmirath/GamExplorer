@@ -1,0 +1,11 @@
+guide:
+  - index.html|jinja:
+    - sources
+assets:
+  - "*/*.html"
+  - "*/*.css"
+sources:
+  - mockup/mockup.html|htmlsections
+  - mockup/mockup.html|htmlsections|pyg:
+    - pyg: { lexer: html }
+  - mockup/style.css|idio

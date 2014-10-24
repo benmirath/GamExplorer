@@ -1,0 +1,158 @@
+@import url('http://fonts.googleapis.com/css?family=Oxygen:400,300,700');
+
+* {
+	font-family: 'Oxygen', sans-serif;
+	font-size: 20px;
+	font-family: 'Inconsolata', helvetica, sans-serif;
+}
+body {
+	/*background-image: url(images/pattern.png);
+	background-color: #10FFCB;
+	background-repeat: repeat;*/
+	/*padding: 3% 0;*/
+	background-position: center;
+	background-size: cover; -webkit-background-size: cover;
+	background-repeat: no-repeat;
+	padding: 0;
+	margin: 0;
+	height: auto;
+
+	position: relative;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	/*overflow: hidden;*/
+	/*margin-bottom: 100px;*/
+	
+}
+#filter {
+	background-image: url(../images/pattern.png);
+	/*background-color: #10FFCB;*/
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-repeat: repeat;
+	/*padding: 3% 0;*/
+	/*margin: 0;*/
+	height: auto;
+	overflow: hidden;
+	/*margin-bottom: 100px;*/
+	/*width: 100%;
+	height: 100%;*/
+	/*width: auto;
+	height: auto;*/
+	/*font-size: 20px;*/
+	/*font-family: 'Inconsolata', helvetica, sans-serif;*/
+}
+
+#wrapper {
+	
+	max-width: 60%;
+	height: 100%;
+	padding: 1%;
+	margin: 0 auto;
+	background-color: rgba(255,255,255, 0.8);
+	/*margin-top: 100px;*/
+	/*margin-bottom: 100px;*/
+}
+.clear {
+	clear: both;
+	padding-top: 2%;
+}
+hr.clear {
+	padding: 0;
+	margin: 2%;
+}
+nav {
+	margin-bottom: 100px;
+}
+ul {
+	padding: 0;
+}
+
+.hidden {
+	display: none;
+}
+nav .menuItem a, 
+.tabItem a {
+	padding: .5em 1em;
+	text-decoration: none;  
+	background-color: #FF6350;  
+	color: white;  
+	border: none;  
+	border-radius: 5px;  
+	box-shadow: 1px 1px 2px silver;
+	float: left;
+	margin: 2%;
+}
+nav .menuItem a:hover, 
+.tabItem a:hover {
+	cursor: pointer;  
+	background-color: #2195CC;
+}
+
+#wrapper h1 {
+	margin: 3%;
+}
+#wrapper>p {
+	margin: 3%;
+}
+#wrapper>p#credits {
+	font-size: .5em;
+	text-align: right;
+}
+#wrapper ul {
+	list-style: none;
+}
+#wrapper li {
+	margin-bottom: 10px;
+}
+#wrapper #generatorValue {
+	margin: 2%;
+}
+
+.controlInput {
+	background-color: #FF6350;
+	font-size: 1em;
+	padding: 2%;
+	margin: 2%;
+	border: none;
+	border-radius: 5px;
+	color: white;
+	max-width: 70%;
+	appearance: none;
+	-webkit-appearance: none;
+}
+.controlInput:hover {
+	cursor: pointer;
+	background-color: #2195CC;
+}
+select.controlInput {
+	background: url(../images/drop-down-arrow.png) no-repeat right #FF6350;
+	background-size: auto 80%;
+	padding-right: 6%;
+}
+#currentGamesField {
+	margin: 2%;
+}
+#currentGamesField .active {
+	color: red;
+}
+.footerText {
+	padding-top: 100px;
+}
+
+/*@media screen  and (max-width : 481px) {
+	#wrapper {
+		max-width: 95%;
+	}
+}*/
+
+@media screen  and (max-width : 481px) {
+	#wrapper {
+		max-width: 95%;
+	}
+}

@@ -1,0 +1,46 @@
+(dp1
+S'doc:mockup/mockup.html'
+p2
+V[["environment", {}]]
+p3
+sS'doc:mockup/style.css'
+p4
+V[["environment", {}]]
+p5
+sS'pattern:*/*.html'
+p6
+V[["environment", {}]]
+p7
+sS'bundle:guide'
+p8
+V[["environment", {}]]
+p9
+sS'pattern:*/*.css'
+p10
+V[["environment", {}]]
+p11
+sS'doc:mockup/style.css|idio'
+p12
+V[["environment", {}]]
+p13
+sS'bundle:assets'
+p14
+V[["environment", {}]]
+p15
+sS'doc:mockup/mockup.html|htmlsections'
+p16
+V[["environment", {}]]
+p17
+sS'doc:index.html|jinja'
+p18
+V[["environment", {}]]
+p19
+sS'bundle:sources'
+p20
+V[["environment", {}]]
+p21
+sS'doc:mockup/mockup.html|htmlsections|pyg'
+p22
+V[["environment", {}], ["pyg", {"lexer": "html"}]]
+p23
+s.
