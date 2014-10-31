@@ -25,20 +25,9 @@
 				</nav>
 				<h1 class="clear">GamExplorer</h1>
 				<p>At a loss for what game to play next? Try out this tool by inputting different games below to gain a new perspective on your tastes! As you add a new game, it is compared to all previous entries, by one of several factors. These so far include the gameplay genre, story themes, or mechnaical concepts featured in each game.</p>
-				<select class="controlInput" id="gameField" name="gameOption">
-					<option>Select a Game</option>
-					<option>Cave Story</option>
-					<option>Thomas was Alone</option>
-					<option>Transistor</option>
-					<option>Bastion</option>
-					<option>Valdis Story: Abbysal City</option>
-					<option>The Last of Us</option>
-					<option>Uncharted 3</option>
-					<option>Dark Souls</option>
-					<option>Dark Souls 2</option>
-					<option>The Elder Scrolls V: Skyrim</option>
-					<option>Zelda: A Link Between Worlds</option>
-				</select>
+				<input class="controlInput" id="gameSearch" type="search" name="gameSearch">
+				<input class="controlInput" id="gameSearchSubmit" type="submit" value="Add Game">
+				<div id="searchResultField"></div>
 				<select class="controlInput" id="sortType" name="sortOption">
 					<option>Genre</option>
 					<option>Themes</option>
@@ -49,8 +38,6 @@
 					<option>Chart</option>
 				</select>
 				<input class="controlInput" id="submitVal" type="submit" value="Display">
-				
-
 				<div class="hidden">
 					<hr class="clear"/>
 					<div id="currentGamesField"></div>

@@ -71,6 +71,9 @@ hr.clear {
 		color: $secondaryColor;
 		font-size: 2em;
 	}
+	h2 {
+		margin-left: 2%;
+	}
 	>p {
 		margin: $marginSize;
 	}
@@ -157,14 +160,22 @@ hr.clear {
 	.controlInput#gameField {
 		width: 30%;
 	}
+	.controlInput#gameSearch {
+		width: 70%;
+	}
+	.controlInput#gameSearchSubmit {
+		width: 20%;
+		float: right;
+	}
 	.controlInput#displayType {
-		width: 17%;
+		width: 29%;
 	}
 	.controlInput#sortType {
-		width: 17%;
+		width: 29%;
 	}
 	.controlInput#submitVal {
-		width: 17%;
+		width: 29%;
+		float: right;
 	}
 
 	#currentGamesField {

@@ -1,8 +1,9 @@
 var baseURL = 'http://www.giantbomb.com/api/',
-	APIKey = '7023adaa7496b3c4d196e749b4b60ce33cb14728',
+	APIKey = '/?api_key=7023adaa7496b3c4d196e749b4b60ce33cb14728',
 	APIFormat = '&format=jsonp&json_callback=setDataObject',
 	APIModifier = '&field_list',
 	APISearch = '&query=';
+	APISearchParameters = '&format=jsonp&json_callback=searchCallback';
 
 var dataObject,
 	dataArray = [],
@@ -98,23 +99,32 @@ function setDataObject (data) {
 	}
 	$('#currentGamesField').empty();
 	$('#currentGamesField').append(currentGames.join(''));
-	$('#currentGamesField > div').accordion({
-      heightStyle : "content",
-      collapsible : true
-    });
+}
+
+function searchCallback (data) {
+	test = data;
+	console.log(test);
+
+	if (data.results.length > 1) {
+		var returnList = $('<ul class="returnList"></ul>');
+		for (result in data.results) {
+			returnList.append($('<li class="searchResult">'+data.results[result].name+'</li>'));
+		}
+		$('#searchResultField').append($('<h2>Your search returned multiple items. Which were you looking for?</h2>'));
+		$('#searchResultField').append(returnList);
+		// logic to list search results
+	} else {
+		// logic to add the single game
+	}
 }
 
 
 function init () {
 	gameField = $('#gameField');
 	buttonField = $('#submitVal');
-	$('#currentGamesField > div').accordion({
-      heightStyle : "content",
-      collapsible : true
-    });
 	$(buttonField).click(function (e) {
 		e.preventDefault();
-		var myURL = baseURL+'game/3030-'+convertGameValue(gameField.val())+'/?api_key='+APIKey+APIFormat;
+		var myURL = baseURL+'game/3030-'+convertGameValue(gameField.val())+APIKey+APIFormat;
 		console.log(myURL);
 		$.ajax({
 			url : myURL,
@@ -124,7 +134,27 @@ function init () {
 			}
 		});
 	});
+	gameSearch = $('#gameSearch');
+	gameSearchSubmit = $('#gameSearchSubmit');
+	$(gameSearchSubmit).click(function (e) {
+		e.preventDefault();
+		var myURL = baseURL + 'search'+APIKey+'&query='+gameSearch.val()+'&resources=game&format=jsonp&json_callback=searchCallback';
+		console.log(myURL);
+		$.ajax({
+			url : myURL,
+			// dataType : 'jsonp',
+			success : function (response) {
+				// var obj = response;
+				// test = response;
+				// console.log(response);
+				// console.log(obj);
+
+				// if (response)
+			}
+		});
+	});
 }
+var test;
 
 function convertGameValue (gameString) {
 	switch (gameString) {

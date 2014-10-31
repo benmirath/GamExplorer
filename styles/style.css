@@ -54,6 +54,8 @@ hr.clear {
     margin-top: 50px;
     color: #2195CC;
     font-size: 2em; }
+  #wrapper h2 {
+    margin-left: 2%; }
   #wrapper > p {
     margin: 2%; }
   #wrapper > p#credits {
@@ -116,12 +118,18 @@ hr.clear {
     padding-right: 6%; }
   #wrapper .controlInput#gameField {
     width: 30%; }
+  #wrapper .controlInput#gameSearch {
+    width: 70%; }
+  #wrapper .controlInput#gameSearchSubmit {
+    width: 20%;
+    float: right; }
   #wrapper .controlInput#displayType {
-    width: 17%; }
+    width: 29%; }
   #wrapper .controlInput#sortType {
-    width: 17%; }
+    width: 29%; }
   #wrapper .controlInput#submitVal {
-    width: 17%; }
+    width: 29%;
+    float: right; }
   #wrapper #currentGamesField {
     margin: 2%; }
   #wrapper #currentGamesField .active {
