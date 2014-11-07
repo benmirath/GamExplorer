@@ -28,7 +28,9 @@ body {
 #filter {
   background-image: url(../images/pattern.png);
   background-attachment: fixed;
-  position: absolute;
+  position: fixed;
+  overflow-x: hidden;
+  overflow-y: auto;
   top: 0;
   bottom: 0;
   left: 0;
@@ -99,6 +101,8 @@ hr.clear {
       #wrapper nav .menuItem a:hover {
         cursor: pointer;
         border: 1px solid #10FFCB; }
+  #wrapper #searchResultField .searchResult:hover {
+    cursor: pointer; }
   #wrapper .controlInput {
     background-color: #FF6350;
     font-size: .8em;

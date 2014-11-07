@@ -6,7 +6,7 @@ var baseURL = 'http://www.giantbomb.com/api/',
 	APISearchParameters = '&format=jsonp&json_callback=searchCallback';
 
 var dataObject,
-	dataArray = [],
+	// dataArray = [],
 	currentGames = [],
 	currentData = [],
 	sort = [],
@@ -16,6 +16,7 @@ var dataObject,
 
 var gameField,
 	buttonField,
+	gameSearchResult = '.searchResult',
 	dataHidden = true;
 
 function setDataObject (data) {
@@ -49,7 +50,64 @@ function setDataObject (data) {
 			}	
 		}
 	}
-	dataArray.push(dataObject.results);
+	renderList();
+
+	// dataArray.push(dataObject.results);
+
+
+	// sort = [];
+	// if ($('#sortType').val() != "Select Sort Value") {
+	// 	switch ($('#sortType').val()) {
+	// 		case "Genre":
+	// 		sort = currentSortGenre;
+	// 		break;
+
+	// 		case "Themes":
+	// 		sort = currentSortTheme;
+	// 		break;
+
+	// 		case "Concepts":
+	// 		sort = currentSortConcept;
+	// 		break;
+	// 	}
+	// }
+	// currentGames = [];
+	// for (var i = 0; i < currentData.length; i++) {
+	// 	currentGames.push('<div><h3>'+currentData[i].results.name+'</h3><div><p>'+currentData[i].results.deck+'</p>');	
+	// 	if (sort.length > 0) {
+	// 		currentGames.push('<ul>');
+	// 		if ($("#sortType").val() == "Genre") {
+	// 			for (var x = 0; x < currentData[i].results.genres.length; x++) {
+	// 				if (hasDuplicates(sort, currentData[i].results.genres[x].name))
+	// 					currentGames.push('<li class="active">'+currentData[i].results.genres[x].name+'</li>');
+	// 				else
+	// 					currentGames.push('<li>'+currentData[i].results.genres[x].name+'</li>');
+	// 			}
+	// 		} else if ($("#sortType").val() == "Themes") {
+	// 			for (var x = 0; x < currentData[i].results.themes.length; x++) {
+	// 				if (hasDuplicates(sort, currentData[i].results.themes[x].name))
+	// 					currentGames.push('<li class="active">'+currentData[i].results.themes[x].name+'</li>');
+	// 				else
+	// 					currentGames.push('<li>'+currentData[i].results.themes[x].name+'</li>');
+	// 			}
+	// 		} else if ($("#sortType").val() == "Concepts") {
+	// 			for (var x = 0; x < currentData[i].results.concepts.length; x++) {
+	// 				if (hasDuplicates(sort, currentData[i].results.concepts[x].name))
+	// 					currentGames.push('<li class="active">'+currentData[i].results.concepts[x].name+'</li>');
+	// 				else
+	// 					currentGames.push('<li>'+currentData[i].results.concepts[x].name+'</li>');
+	// 			}
+	// 		}
+	// 		currentGames.push('</ul>');
+	// 	}
+	// 	currentGames.push('</div></div>');
+	// }
+	// $('#currentGamesField').empty();
+	// $('#currentGamesField').append(currentGames.join(''));
+}
+
+function renderList () {
+
 	sort = [];
 	if ($('#sortType').val() != "Select Sort Value") {
 		switch ($('#sortType').val()) {
@@ -67,6 +125,7 @@ function setDataObject (data) {
 		}
 	}
 	currentGames = [];
+	currentSort = [];
 	for (var i = 0; i < currentData.length; i++) {
 		currentGames.push('<div><h3>'+currentData[i].results.name+'</h3><div><p>'+currentData[i].results.deck+'</p>');	
 		if (sort.length > 0) {
@@ -106,39 +165,72 @@ function searchCallback (data) {
 	console.log(test);
 
 	if (data.results.length > 1) {
+		console.log(data);
 		var returnList = $('<ul class="returnList"></ul>');
 		for (result in data.results) {
-			returnList.append($('<li class="searchResult">'+data.results[result].name+'</li>'));
+			console.log();
+			returnList.append($('<li class="searchResult" data-game_id="' + data.results[result].id + '">'+data.results[result].name+'</li>'));
 		}
+		$('#searchResultField').empty();
 		$('#searchResultField').append($('<h2>Your search returned multiple items. Which were you looking for?</h2>'));
 		$('#searchResultField').append(returnList);
+		assignDynamicEvents();
 		// logic to list search results
 	} else {
 		// logic to add the single game
 	}
 }
 
+// var myTest;
+function assignDynamicEvents () {
+	console.log('init called');
+	$('.searchResult').click(function (e) {
+		e.preventDefault();
+		// console.log("Working!");
+		// var result = $('');
+		// myTest = e;
+		// console.log(e);
+		var gameID = $(e.currentTarget).data('game_id');
+		console.log(gameID);
+		var myURL = baseURL+'game/3030-'+gameID+APIKey+APIFormat;
+		$.ajax({
+			url : myURL,
+			success : function (response) {
+				console.log(response);
+			},
+			error : function (response) {
+				console.log(response);
+			}
+		});
+
+		$('#searchResultField').empty();
+	});
+}
+
 
 function init () {
 	gameField = $('#gameField');
 	buttonField = $('#submitVal');
+	// gameOptionField = $();
+	
 	$(buttonField).click(function (e) {
 		e.preventDefault();
-		var myURL = baseURL+'game/3030-'+convertGameValue(gameField.val())+APIKey+APIFormat;
-		console.log(myURL);
-		$.ajax({
-			url : myURL,
-			dataType : 'jsonp',
-			success : function (response) {
-				console.log(response);
-			}
-		});
+		renderList();
+		// var myURL = baseURL+'game/3030-'+convertGameValue(gameField.val())+APIKey+APIFormat;
+		// console.log(myURL);
+		// $.ajax({
+		// 	url : myURL,
+		// 	dataType : 'jsonp',
+		// 	success : function (response) {
+		// 		console.log(response);
+		// 	}
+		// });
 	});
 	gameSearch = $('#gameSearch');
 	gameSearchSubmit = $('#gameSearchSubmit');
 	$(gameSearchSubmit).click(function (e) {
 		e.preventDefault();
-		var myURL = baseURL + 'search'+APIKey+'&query='+gameSearch.val()+'&resources=game&format=jsonp&json_callback=searchCallback';
+		var myURL = baseURL + 'search'+APIKey+'&query='+removeSpaces(gameSearch.val())+'&resources=game&format=jsonp&json_callback=searchCallback';
 		console.log(myURL);
 		$.ajax({
 			url : myURL,
@@ -210,6 +302,10 @@ var list = {
 	Skyrim : 33394,
 	ZeldaLinkBetweenWorlds : 42402
 };
+
+function removeSpaces (string) {
+	return  string.split(' ').join('');
+}
 
 function hasDuplicates(array, stringMatch) {
     var log = 0
