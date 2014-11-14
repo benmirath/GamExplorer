@@ -134,10 +134,18 @@ hr.clear {
   #wrapper .controlInput#submitVal {
     width: 29%;
     float: right; }
-  #wrapper #currentGamesField {
-    margin: 2%; }
+  #wrapper ._resultField, #wrapper #currentGamesField, #wrapper #currentSortField {
+    margin: 2%;
+    width: 44%;
+    display: inline-block; }
+  #wrapper ._togglableField {
+    cursor: pointer; }
+  #wrapper #currentGamesField .gameResultItemHeader {
+    cursor: pointer; }
   #wrapper #currentGamesField .active {
     color: #FF6350; }
+  #wrapper #currentSortField .sortResultItem {
+    cursor: pointer; }
 
 @media screen and (max-width: 768px) {
   #wrapper {

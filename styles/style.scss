@@ -144,9 +144,6 @@ hr.clear {
 				cursor: pointer;
 			}
 		}
-		// .searchResult:hover {
-		// 	cursor: pointer;
-		// }
 	}
 
 	// INPUT FIELDS
@@ -192,13 +189,29 @@ hr.clear {
 		float: right;
 	}
 
-	#currentGamesField {
+	._resultField {
 		margin: 2%;
+		width: 44%;
+		display: inline-block;
+	}
+	._togglableField {
+		cursor: pointer;
+	}
 
-
+	#currentGamesField {
+		@extend ._resultField;			
+		.gameResultItemHeader {
+			cursor: pointer;
+		}
 	}
 	#currentGamesField .active {
 		color: $highlightColor;
+	}
+	#currentSortField {
+		@extend ._resultField;
+		.sortResultItem {
+			cursor: pointer;	
+		}
 	}
 }
 

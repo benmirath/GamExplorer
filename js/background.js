@@ -14,6 +14,10 @@ function getRandomInt(min, max) {
 
 function backgroundInit () {
 	var bg = $('body');
+
+	// This should be a variable outside the function that you increment. \
+	//Every time it gets to the full length of the array of iamge uri's, 
+	//loop it back to 0
 	var select = getRandomInt(0, images.length);
 
 	if (select === cachedImage) return backgroundInit();
