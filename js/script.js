@@ -19,6 +19,9 @@ var gameField,
 	gameSearchResult = '.searchResult',
 	dataHidden = true;
 
+//CurrentData holds the array of data received from server
+
+
 function setDataObject (data) {
 	if (dataHidden) {
 		dataHidden = false;
@@ -81,17 +84,17 @@ function renderList () {
 			if ($("#sortType").val() == "Genre") {
 				for (var x = 0; x < currentData[i].results.genres.length; x++) {
 					if (!hasDuplicates(sort, currentData[i].results.genres[x].name))
-						currentSort.push('<li class="sortResultItem">'+currentData[i].results.genres[x].name+'</li>');
+						currentSort.push('<li><h3 class="sortResultItem">'+currentData[i].results.genres[x].name+'</h3></li>');
 				}
 			} else if ($("#sortType").val() == "Themes") {
 				for (var x = 0; x < currentData[i].results.themes.length; x++) {
 					if (!hasDuplicates(sort, currentData[i].results.themes[x].name))
-						currentSort.push('<li class="sortResultItem">'+currentData[i].results.themes[x].name+'</li>');
+						currentSort.push('<li><h3 class="sortResultItem">'+currentData[i].results.themes[x].name+'</h3></li>');
 				}
 			} else if ($("#sortType").val() == "Concepts") {
 				for (var x = 0; x < currentData[i].results.concepts.length; x++) {
 					if (!hasDuplicates(sort, currentData[i].results.concepts[x].name))
-						currentSort.push('<li class="sortResultItem">'+currentData[i].results.concepts[x].name+'</li>');
+						currentSort.push('<li><h3 class="sortResultItem">'+currentData[i].results.concepts[x].name+'</h3></li>');
 				}
 			}
 		}
@@ -130,6 +133,8 @@ function searchCallback (data) {
 	}
 }
 
+var mctest;
+
 function assignDynamicEvents () {
 	$('.searchResult').click(function (e) {
 		e.preventDefault();
@@ -144,28 +149,55 @@ function assignDynamicEvents () {
 	});
 
 	$('.sortResultItem').click(function (e) {
-		console.log("click logged!");
-		console.log(e);
-		$('.gameResultItem.active').each (function (e) {
-			e.removeClass('active');
-		});
+		var tar = $(this);
 
-		$.each(dataObject.results, function (e) {
-			console.log(e);
-			if ($("#sortType").val() == "Genre") {
-				// for (var obj in )
-			} else if ($("#sortType").val() == "Themes") {
+		if (!tar.hasClass('active')) {
+			$('.gameResultItemHeader.active').each (function (e) {
+				$(this).removeClass('active');
+			});
+			$('.sortResultItem.active').each (function (e) {
+				$(this).removeClass('active');
+			});
+			for (var obj in currentData) {
+				if ($("#sortType").val() == "Genre") {
+					console.log('In Genre');
+					for (var obj2 in currentData[obj].results.genres) {
+						if (currentData[obj].results.genres[obj2].name === tar.html()) {
+							tar.addClass('active');
+							$('.gameResultItemHeader[data-game_id="'+currentData[obj].results.id+'"]').addClass('active');
+							break;
+						}
 
-			} else if ($("#sortType").val() == "Concepts") {
-			
+					}
+				} 
+				else if ($("#sortType").val() == "Themes") {
+					for (var obj2 in currentData[obj].results.themes) {
+						if (currentData[obj].results.themes[obj2].name === tar.html()) {
+							tar.addClass('active');
+							$('.gameResultItemHeader[data-game_id="'+currentData[obj].results.id+'"]').addClass('active');
+							break;
+						}
+					}
+				} 
+				else if ($("#sortType").val() == "Concepts") {
+					for (var obj2 in currentData[obj].results.concepts) {
+						if (currentData[obj].results.concepts[obj2].name === tar.html()) {
+							tar.addClass('active');
+							$('.gameResultItemHeader[data-game_id="'+currentData[obj].results.id+'"]').addClass('active');
+							break;
+						}
+					}
+				}
+
 			}
-		});
-
-		$('.gameResultItem').each (function () {
-			
-			// if ($(this).val() == e) 
-
-		});
+		} else {
+			$('.gameResultItemHeader.active').each (function (e) {
+			$(this).removeClass('active');
+			});
+			$('.sortResultItem.active').each (function (e) {
+				$(this).removeClass('active');
+			});
+		}
 	});
 	$('.gameResultItem').click(function (e) {
 
@@ -182,6 +214,9 @@ function init () {
 	});
 	gameSearch = $('#gameSearch');
 	gameSearchSubmit = $('#gameSearchSubmit');
+
+
+
 	$(gameSearchSubmit).click(function (e) {
 		e.preventDefault();
 		var myURL = baseURL + 'search'+APIKey+'&query='+removeSpaces(gameSearch.val())+'&resources=game&format=jsonp&json_callback=searchCallback';

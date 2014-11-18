@@ -138,6 +138,18 @@ hr.clear {
 	}
 
 	#searchResultField {
+
+
+		.returnList {
+
+			// border-radius: 25px;
+			// border: solid 3px $highlightColor;
+			// padding-right:
+			max-height: 100px;
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
+
 		.searchResult {
 			// cursor: pointer;
 			&:hover {
@@ -191,7 +203,7 @@ hr.clear {
 
 	._resultField {
 		margin: 2%;
-		width: 44%;
+		width: 42%;
 		display: inline-block;
 	}
 	._togglableField {
@@ -199,18 +211,29 @@ hr.clear {
 	}
 
 	#currentGamesField {
-		@extend ._resultField;			
+		@extend ._resultField;	
+		float: left;		
 		.gameResultItemHeader {
 			cursor: pointer;
+			color: black;
+
+			&.active {
+				color: $primaryColor;
+			}
 		}
 	}
-	#currentGamesField .active {
-		color: $highlightColor;
-	}
+
 	#currentSortField {
 		@extend ._resultField;
+		float: right;
+
 		.sortResultItem {
-			cursor: pointer;	
+			cursor: pointer;
+			color: black;
+
+			&.active {
+				color: $primaryColor;
+			}	
 		}
 	}
 }

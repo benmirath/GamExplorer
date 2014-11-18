@@ -101,6 +101,10 @@ hr.clear {
       #wrapper nav .menuItem a:hover {
         cursor: pointer;
         border: 1px solid #10FFCB; }
+  #wrapper #searchResultField .returnList {
+    max-height: 100px;
+    overflow-x: hidden;
+    overflow-y: auto; }
   #wrapper #searchResultField .searchResult:hover {
     cursor: pointer; }
   #wrapper .controlInput {
@@ -136,16 +140,24 @@ hr.clear {
     float: right; }
   #wrapper ._resultField, #wrapper #currentGamesField, #wrapper #currentSortField {
     margin: 2%;
-    width: 44%;
+    width: 42%;
     display: inline-block; }
   #wrapper ._togglableField {
     cursor: pointer; }
-  #wrapper #currentGamesField .gameResultItemHeader {
-    cursor: pointer; }
-  #wrapper #currentGamesField .active {
-    color: #FF6350; }
-  #wrapper #currentSortField .sortResultItem {
-    cursor: pointer; }
+  #wrapper #currentGamesField {
+    float: left; }
+    #wrapper #currentGamesField .gameResultItemHeader {
+      cursor: pointer;
+      color: black; }
+      #wrapper #currentGamesField .gameResultItemHeader.active {
+        color: #10FFCB; }
+  #wrapper #currentSortField {
+    float: right; }
+    #wrapper #currentSortField .sortResultItem {
+      cursor: pointer;
+      color: black; }
+      #wrapper #currentSortField .sortResultItem.active {
+        color: #10FFCB; }
 
 @media screen and (max-width: 768px) {
   #wrapper {
