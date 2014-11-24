@@ -55,9 +55,12 @@ body {
 	clear: both;
 	padding-top: 2%;
 }
-hr.clear {
-	padding: 0;
-	margin: 2%;
+hr {
+	width: 95%;
+	&.clear {
+		padding: 0;
+		margin: 2%;
+	}
 }
 
 #wrapper {
