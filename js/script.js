@@ -112,7 +112,7 @@ function assignDynamicEvents () {
 					}
 				} 
 				else if ($("#sortType").val() == "Themes") {
-					for (var obj2 in currentGamesData[obj].results.themes) {
+					for (var obj2 in currentGamesData[obj].themes) {
 						if (currentGamesData[obj].themes[obj2].name === tar.html()) {
 							tar.addClass('active');
 							$('.gameResultItemHeader[data-game_id="'+currentGamesData[obj].id+'"]').addClass('active');
