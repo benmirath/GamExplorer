@@ -208,6 +208,13 @@ function requestGameDataSearch () {
 	var myURL = "http://www.giantbomb.com/api/search/";
 	$.ajax({
 		url : myURL,
+		crossDomain : true,
+		xhrFields : {
+			withCredentials : true
+		},
+		headers: {
+		     'Authorization': "Basic XXXXX"
+		},
 		data : {
 			api_key : APIKey,
 			query : removeSpaces(gameSearch.val()),
@@ -229,6 +236,13 @@ function requestGameDataSingle (target) {
 	var myURL = "http://www.giantbomb.com/api/game/3030-"+gameID;
 	$.ajax({
 		url : myURL,
+		crossDomain : true,
+		xhrFields : {
+			withCredentials : true
+		},
+		headers: {
+		     'Authorization': "Basic XXXXX"
+		},
 		data : {
 			api_key : APIKey,
 			field_list : 'id,name,deck,concepts,themes,genres',
@@ -244,6 +258,13 @@ function requestGameDataSingleId (id) {
 	var myURL = "http://www.giantbomb.com/api/game/3030-"+gameID;
 	$.ajax({
 		url : myURL,
+		crossDomain : true,
+		xhrFields : {
+			withCredentials : true
+		},
+		headers: {
+		     'Authorization': "Basic XXXXX"
+		},
 		data : {
 			api_key : APIKey,
 			field_list : 'id,name,deck,concepts,themes,genres',
