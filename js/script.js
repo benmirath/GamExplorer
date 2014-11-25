@@ -46,7 +46,6 @@ function init () {
 	buttonField = $('#submitVal');
 	$(buttonField).click(function (e) {
 		e.preventDefault();
-		renderList();
 		var sortType;
 		switch ($("#sortType").val()) {
 			case "Genre":
@@ -59,14 +58,27 @@ function init () {
 				sortType = sort_type.CONCEPT;
 				break;
 		}
+		renderList();
 		processData(currentGamesData, sortType);
 
-
+		switch ($('#displayType').val()) {
+			case "List":
+				$('#textResults').addClass('active');
+				$('#chartResults').removeClass('active');
+				break;
+			case "Chart":
+				$('#textResults').removeClass('active');
+				$('#chartResults').addClass('active');
+				break;
+		}
+		
 	});
 	gameSearch = $('#gameSearch');
 	gameSearchSubmit = $('#gameSearchSubmit');
+	
 	$(gameSearchSubmit).click(function (e) {
 		e.preventDefault();
+		$('#searchLoading').css('opacity', 1);
 		requestGameDataSearch();
 	});
 }
@@ -214,7 +226,6 @@ function requestGameDataSearch () {
 }
 function requestGameDataSingle (target) {
 	var gameID = $(target.currentTarget).data('game_id');
-	// var myURL = baseURL+'game/3030-'+gameID+APIKey+APIFormat;
 	var myURL = "http://www.giantbomb.com/api/game/3030-"+gameID;
 	$.ajax({
 		url : myURL,
@@ -227,10 +238,27 @@ function requestGameDataSingle (target) {
 	});
 
 	$('#searchResultField').empty();
+}
+function requestGameDataSingleId (id) {
+	var gameID = id;
+	var myURL = "http://www.giantbomb.com/api/game/3030-"+gameID;
+	$.ajax({
+		url : myURL,
+		data : {
+			api_key : APIKey,
+			field_list : 'id,name,deck,concepts,themes,genres',
+			format : 'jsonp',
+			json_callback : "setDataObject"
+		}
+	});
 
+	$('#searchResultField').empty();
 }
 
 function searchCallback (data) {
+	$('#gameSearch').val('');
+	$('#searchResultField').empty();
+	$('#searchLoading').css('opacity', 0);
 
 	console.log("LOGGED")
 	if (data.results.length > 1) {
@@ -240,8 +268,6 @@ function searchCallback (data) {
 			console.log();
 			returnList.append($('<li class="searchResult" data-game_id="' + data.results[result].id + '">'+data.results[result].name+'</li>'));
 		}
-		$('#gameSearch').empty();
-		$('#searchResultField').empty();
 		$('#searchResultField').append($('<h2>Your search returned multiple items. Which were you looking for?</h2>'));
 		$('#searchResultField').append(returnList);
 		assignDynamicEvents();
@@ -249,11 +275,10 @@ function searchCallback (data) {
 	} else if (data.results.length > 1) {
 		console.log(data);
 		var gameID = results[0].id;
-		var myURL = baseURL+'game/3030-'+gameID+APIKey+APIFormat;
-		$.ajax({ url : myURL });
-		// logic to add the single game
+		requestGameDataSingleId(gameID);
 	} else {
 		console.log("No game result found");
+		$('#searchResultField').append($('<h2>Your search returned no items. Please modify your search and try again.</h2>'));
 	}
 }
 
@@ -288,7 +313,30 @@ function setDataObject (data) {
 			}	
 		}
 	}
+
+	// switch ($('#displayType').val()) {
+	// 	case "List":
+	// 		renderList();
+	// 		break;
+	// 	case "Chart":
+	// 		processData()
+	// 		break;
+	// }
+
+	switch ($("#sortType").val()) {
+		case "Genre":
+			sortType = sort_type.GENRE;
+			break;
+		case "Themes":
+			sortType = sort_type.THEME;
+			break;
+		case "Concepts":
+			sortType = sort_type.CONCEPT;
+			break;
+	}
 	renderList();
+	processData(currentGamesData, sortType);
+	
 }
 
 function renderList () {

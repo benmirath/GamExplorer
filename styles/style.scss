@@ -1,4 +1,5 @@
 @import url("http://fonts.googleapis.com/css?family=Oxygen:400,300,700");
+@import url("data_vis_style.css");
 
 $mainFont: "Inconsolata", helvetica, sans-serif;
 $primaryColor : #10FFCB;
@@ -141,20 +142,15 @@ hr {
 	}
 
 	#searchResultField {
-
+		clear:both;
 
 		.returnList {
-
-			// border-radius: 25px;
-			// border: solid 3px $highlightColor;
-			// padding-right:
 			max-height: 100px;
 			overflow-x: hidden;
 			overflow-y: auto;
 		}
 
 		.searchResult {
-			// cursor: pointer;
 			&:hover {
 				cursor: pointer;
 			}
@@ -177,18 +173,49 @@ hr {
 		cursor: pointer;
 		background-color: #2195CC;
 	}
+
 	select.controlInput {
 		background: url(../images/drop-down-arrow.png) no-repeat right #FF6350;
 		background-size: auto 80%;
 		padding-right: 6%;
 	}
 
+	div#searchWrapper {
+		position: relative;
+		display:inline-block;
+		width: 70%;
+		margin: 1em;
+		float: left;
+
+		#searchLoading {
+			width: 30px;
+			height: 30px;
+			pointer-events:none;
+			background: url(../images/loading.gif) no-repeat;
+			background-size: 30px;
+			position: absolute;
+			right: 15px;
+			top: 15px;
+			opacity: 0;
+		}
+		.controlInput#gameSearch {
+			cursor: auto;
+			width: 70%;
+			width: 100%;
+			padding: 3% 2%;
+			margin: 0;
+
+			&::-webkit-search-decoration,
+			&::-webkit-search-cancel-button,
+			&::-webkit-search-results-button,
+			&::-webkit-search-results-decoration { display: none; }
+		}	
+	}
+	
 	.controlInput#gameField {
 		width: 30%;
 	}
-	.controlInput#gameSearch {
-		width: 70%;
-	}
+	
 	.controlInput#gameSearchSubmit {
 		width: 20%;
 		float: right;
@@ -238,6 +265,24 @@ hr {
 				color: $primaryColor;
 			}	
 		}
+	}
+
+	._results {
+		max-height: 0px;
+		overflow: hidden;
+		transition: max-height .5s;
+		-webkit-transition: max-height .5s;
+		-moz-transition: max-height .5s;
+		-ms-transition: max-height .5s;
+		&.active {
+			max-height: 1000px;
+		}
+	}
+	#textResults {
+		@extend ._results;
+	}
+	#chartResults {
+		@extend ._results;
 	}
 }
 

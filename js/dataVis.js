@@ -33,10 +33,10 @@ var cluster = d3.layout.cluster()
 
 var bundle = d3.layout.bundle();
 var svg = d3.select("#game-vis").append("svg")
-    	.attr("width", circlew)
+    	.attr("width", $('#wrapper').outerWidth())
     	.attr("height", diameter+240)
   	  .append("g")
-    	.attr("transform", "translate(" + (radius + 75) + "," + (radius - 50) + ")");
+    	.attr("transform", "translate(" + (radius) + "," + (radius) + ")");
 
 var svgDefs = svg.append("svg:defs")  
 
@@ -50,30 +50,31 @@ var maxGamesToTopics = 0,
 	maxTopicsToGames = 0,
 	totalGames = 50;
 var gradientCounter = 0;
-	
-// var giaVidPlayer;
-
-// $(document).ready(function() {
-// 	Tabletop.init( { key: '0ArF9tD_naD7edHIyOEE3endKbzZmZExTdWVoT0xTTmc', callback: processDataOriginal, simpleSheet: true } );
-// });
 
 function setSVG () {
 	$('#game-vis').empty();
 	svg = {};
 	svg = d3.select("#game-vis").append("svg")
-    	.attr("width", circlew)
+    	.attr("width", $('#wrapper').outerWidth())
     	.attr("height", diameter+240)
   	  .append("g")
-    	.attr("transform", "translate(" + (radius + 75) + "," + (radius - 50) + ")")
+    	.attr("transform", "translate(" + (radius) + "," + (radius) + ")")
 
-    svgDefs = svg.append("svg:defs")  
+    svgDefs = svg.append("svg:defs");
+    map = {
+		"name": "",
+		"children": []
+	};
+	gwlinks = [];
+	wtlinks = [];
+	gtlinks = [];
 }
 
-var bensData;
+function processGuardianData () {
+	Tabletop.init( { key: '0ArF9tD_naD7edHIyOEE3endKbzZmZExTdWVoT0xTTmc', callback: processDataOriginal, simpleSheet: true } );
+}
 function processDataOriginal(data){
 	setSVG();
-	bensData = data;
-
 	var gameRootNode = {
 		name: 'games',
 		children: []
@@ -190,32 +191,6 @@ function processDataOriginal(data){
 	map.children.push(contentRootNode)
 	
 	drawChart();
-	
-	$('.gia-button').click(function(e){
-		
-		
-
-		if($(this).hasClass('gia-button-selected') == false){	
-			currentSelectionText = $(this).text();
-			$(this).text('Show all games')	
-			currentSelectionBtn = this;
-						
-			if($(this).attr('id') == 'btn-guns'){
-				showBarConnections( gameGunsArray['0'])
-			} else if($(this).attr('id') == 'btn-violence'){
-				showBarConnections( gameViolenceArray['0'])
-			} else if($(this).attr('id') == 'btn-audience'){
-				showBarConnections( ratingArray[0])
-			}	
-		} else {
-			hideBarConnections(currentSelection )
-		}	
-	})	
-
-	console.log("GAMES");
-	console.log(games);
-	console.log("TOPICS");
-	console.log(topics);
 }
 
 
@@ -225,29 +200,8 @@ var sort_type = {
 	CONCEPT : "Concept"
 };
 function processData(data, type){
-	// console.log("DONE");
 	setSVG();
-	bensData = data;
-	var gameData = data.gamesData;
-
-	var topicData;
-	switch (type) {
-		case sort_type.GENRE:
-			topicData = data.genreData;
-			break;
-		case sort_type.THEME:
-			topicData = data.themeData;
-			break;
-		case sort_type.CONCEPT:
-			topicData = data.conceptData;
-			break;
-	}
-	
-	// var totalGames = gameData.length;
 	var totalGames = data.length;
-
-	// console.log(data);
-
 
 	var gameRootNode = {
 		name: 'games',
@@ -271,28 +225,6 @@ function processData(data, type){
 
 	for(var d = 0; d < totalGames; d++){
 
-
-		games[ data[d]['name'] ] = {
-			name: data[d]['name'],
-			className: getClassName(data[d]['name'].toString()),
-			children: [],
-			// size: Number(data[d]['sales']),
-
-			numTopics: 0,
-			topics: [],
-			nodeType: 'game',
-
-			connectedNodes: [],
-			// gameRating: data[d]['rating'],
-			violenceLink: '',
-			weaponLink: '',
-			// ratingLink: data[d]['rating'],
-			// weaponConnections:{'guns': [], 'noguns': []},
-			topicConnections: {'violence': [], 'noviolence': []}
-		}
-		
-		// var contentTags = ( data[d]['contentdescripters'] != '' ) ? data[d]['contentdescripters'].split(', '): [];	
-		// var contentTags = ( data[d]['contentdescripters'] != '' ) ? data[d]['contentdescripters'].split(', '): [];	
 		var contentTags;
 
 		switch (type) {
@@ -306,23 +238,34 @@ function processData(data, type){
 				contentTags = data[d].concepts;
 				break;
 		}
-		// switch (type) {
-		// 	case sort_type.GENRE:
-		// 		contentTags = currentSortGenre;
-		// 		break;
-		// 	case sort_type.THEME:
-		// 		contentTags = currentSortTheme;
-		// 		break;
-		// 	case sort_type.CONCEPT:
-		// 		contentTags = currentSortConcept;
-		// 		break;
-		// }
+		console.log(contentTags);
+		console.log(contentTags.length);
+
+		games[ data[d]['name'] ] = {
+			name: data[d]['name'],
+			className: getClassName(data[d]['name'].toString()),
+			children: [],
+			// size: Number(data[d]['sales']),
+			size : contentTags.length,
+			numTopics: 0,
+			topics: [],
+			nodeType: 'game',
+
+			connectedNodes: [],
+			// gameRating: data[d]['rating'],
+			violenceLink: '',
+			weaponLink: '',
+			// ratingLink: data[d]['rating'],
+			// weaponConnections:{'guns': [], 'noguns': []},
+			topicConnections: {'violence': [], 'noviolence': []}
+		}
+		
+		
 		if( contentTags.length > 0){
 			var includeGameContent = false
 			
 			games[ data[d]['name'] ]['numTopics'] = contentTags.length;
 			contentTags.forEach(function(t){
-				// console.log(t);
 				
 				if( !topics[ t.name ] ){
 					topics[t.name] = {
@@ -365,14 +308,8 @@ function processData(data, type){
 			
 		} else {
 			games[ data[d]['name'] ]['violenceLink'] = 'noviolence'
-		}
-
-		
+		}	
 	}
-	console.log("GAMES");
-	console.log(games);
-	console.log("TOPICS");
-	console.log(topics);
 
 	for(var g in games){
 		gameRootNode.children.push(games[g])
@@ -397,27 +334,6 @@ function processData(data, type){
 	map.children.push(contentRootNode)
 	
 	drawChart();
-	
-	$('.gia-button').click(function(e){
-		
-		
-
-		if($(this).hasClass('gia-button-selected') == false){	
-			currentSelectionText = $(this).text();
-			$(this).text('Show all games')	
-			currentSelectionBtn = this;
-						
-			if($(this).attr('id') == 'btn-guns'){
-				showBarConnections( gameGunsArray['0'])
-			} else if($(this).attr('id') == 'btn-violence'){
-				showBarConnections( gameViolenceArray['0'])
-			} else if($(this).attr('id') == 'btn-audience'){
-				showBarConnections( ratingArray[0])
-			}	
-		} else {
-			hideBarConnections(currentSelection )
-		}	
-	})	
 }
 
 function color(val){
@@ -576,42 +492,9 @@ function getClassName(title){
 
 function setPopupPosition(e){
 	e = jQuery.event.fix(e);
-	mouseX = e.pageX //- $('#gia-interactive').offset().left
-	mouseY = e.pageY
-	
-	
-	if(mouseY < $('#game-vis').offset().top + $('#game-vis').outerHeight()/2){
-		//bottom 
-		mouseY -= $('#node-info').outerHeight() + 10
-	} else {
-		//top 
-		 mouseY += 10	
-	}
-	
-	
-	if(mouseX < $('#game-vis').offset().left + $('#game-vis').outerWidth()/2 ){
-		//left side
-		mouseX -= $('#node-info').outerWidth() + 10
-		
-		if(mouseX  < 0){
-			mouseX = 10
-		}
-		
-	} else {
-		//right side
-		mouseX += 10
-		
-		if(mouseX + $("#node-info").outerWidth() > $(window).width() - 20){
-			mouseX = $(window).width() - 10 - $("#node-info").outerWidth()
-		}	
-	}
-	
-	if(e.pageY + $('#node-info').outerHeight() + 20 > $(document).height() ){
-		mouseY = e.pageY - 20 - $('#node-info').outerHeight()
-	}
-	
-	
-		
+	mouseX = e.pageX; //- $('#gia-interactive').offset().left
+	mouseY = e.pageY;
+	mouseY += $('#filter').scrollTop();
 
 	$('.gia-popup').css({
 		top: mouseY,
@@ -620,141 +503,6 @@ function setPopupPosition(e){
 
 }
 
-var currentSelection = undefined;
-var currentSelectionBtn = undefined;
-var currentSelectionText = ''
-function showBarConnections(d) {
-	
-	if(currentSelection){
-		hideBarConnections(currentSelection )
-	}
-	
-	currentSelection = d;
-	$(currentSelectionBtn).addClass('gia-button-selected')
-	$(currentSelectionBtn).text('Show all games')
-	
-	for(var s in smallVis){
-		smallVis[s].selectAll('.bar')
-			.style('fill', '#eee')
-	}
-	
-
-	smallVis[d['contentType']].select('#bar-' + d.name.toLowerCase().replace(' ', ''))
-		.style('fill', function(d){
-			if(d.contentType == 'rating'){
-				return '#5265AE'
-			} else if(d.contentType == 'guns'){
-				return '#CC2F27'
-			} else if(d.contentType == 'violence'){
-				return '#5E843A'
-			}
-			
-		})
-	//this.classed('bar-highlight', true)
-
-	svg.selectAll('.circle-text')
-		.classed('circle-text-dim', true);	
-	svg.selectAll('path.links')
-		.style("stroke-opacity", .01)
-
-	svg.selectAll('.btext-' + d.name.toLowerCase().replace(' ', ''))
-		.classed('highlight', true)
-		.classed('circle-text-dim', false);
-	
-	if(d.contentType == 'rating'){
-		svg.selectAll('.barlink-' + d.name.toLowerCase().replace(' ', ''))
-			.style("stroke-opacity", 1)	
-			
-			
-		svg.selectAll('.btext-' + d.name.toLowerCase().replace(' ', ''))
-			.classed('highlight', true)
-			.classed('circle-text-dim', false);
-	} 
-	
-	svg.selectAll('.node-dot')
-		.style('opacity', .01)
-	
-	
-	d.data.forEach(function(game){
-		svg.select('#nodetext-' + game.className)
-			.classed('highlight', true)
-			.classed('circle-text-dim', false);
-			
-			svg.select('.nodedot-' + game.className)
-				.style('opacity', 1)
-			
-			if(d.contentType == 'guns' ){
-				var wArray = game.weaponConnections[ d.name.toLowerCase().replace(' ', '') ]		
-				wArray.forEach(function(node){
-					svg.select('.nodedot-' +node['className'])
-						.style('opacity', 1)
-					
-					svg.select('.barlink-' + game.className + node['className'])
-						.style("stroke-opacity", 1)
-				})
-			} else if( d.contentType == 'violence'){
-
-				var tArray = game.topicConnections[ d.name.toLowerCase().replace(' ', '') ]
-
-				tArray.forEach(function(node){
-					
-					svg.select('.nodedot-' +node['className'])
-						.style('opacity', 1)
-					
-					svg.select('.barlink-' + game.className + node['className'])
-						.style("stroke-opacity", 1)
-				})
-			}  else {
-				
-				game.connectedNodes.forEach(function(node){
-					
-					svg.select('.nodedot-' +node)
-						.style('opacity', 1)
-					
-					svg.select('#nodetext-' + node)
-						.classed('highlight', true)
-						.classed('circle-text-dim', false);
-				})
-			}
-	})
-
-}
-
-function hideBarConnections(d) {
-	$('.gia-button').removeClass('gia-button-selected')
-	$(currentSelectionBtn).text(currentSelectionText)
-	
-	for(var s in smallVis){
-		
-		smallVis[s].selectAll('.bar')
-			.style('fill', function(d){
-				if(d.contentType == 'rating'){
-					return '#5265AE'
-				} else if(d.contentType == 'guns'){
-					return '#CC2F27'
-				} else if(d.contentType == 'violence'){
-					return '#5E843A'
-				}
-				
-			})
-	}
-	
-	svg.selectAll('.node-dot')
-		.style('opacity', 1)
-	
-	smallVis[d['contentType']].select('#bar-' + d.name.toLowerCase().replace(' ', ''))
-		.classed('bar-highlight', false)
-		
-	svg.selectAll('.circle-text')
-		.classed('highlight', false)
-		.classed('circle-text-dim', false);
-	svg.selectAll('path.links')
-		.style("stroke-opacity", 1)
-	
-	currentSelection = undefined;
-	currentSelectionBar = undefined;
-	currentSelection = ''
-}
 
 function showConnections(d) {
 
@@ -838,12 +586,7 @@ function hideConnections(d) {
 		.classed('highlight', false);
 		
 	svg.selectAll('.node-dot')
-		.style("opacity", 1)
-		
-	if(currentSelection){
-		showBarConnections(currentSelection )
-	}
-		
+		.style("opacity", 1)		
 }
 
 
@@ -853,7 +596,6 @@ function getGradient(startValue, endValue, topic1, topic2){
 
 	var gradient = svgDefs.append("svg:linearGradient")
 		.attr("id", gradientId)
-		//.attr("spreadMethod", "pad");
 	
 	gradient.append("svg:stop")
 	    .attr("offset", "10%")
@@ -870,20 +612,18 @@ function getGradient(startValue, endValue, topic1, topic2){
 
 function getColor(topic, value){
 	var color = '#ccc'
-	if(topic == 'game'){
-		
-		if( value <= 2000000){
+	if(topic == 'game'){	
+		if( value <= 1){
 			color = '#D7DEF7'
-		} else if( value > 2000000 && value <= 4000000){
+		} else if( value > 1 && value <= 5){
 			color = '#8B9BD9'
-		} else if( value > 4000000 && value <= 8000000){
+		} else if( value > 5 && value <= 10){
 			color = '#5265AE'
-		} else if( value > 8000000 && value <= 16000000){
+		} else if( value > 10 && value <= 15){
 			color = '#394B9F'
-		} else if( value > 16000000 ){
+		} else if( value > 15 ){
 			color = '#2C3878'
-		}
-	
+		}	
 	}else if(topic == 'weapon'){
 
 		if( value <= 1){

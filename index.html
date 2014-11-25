@@ -15,7 +15,6 @@
 		<script src="js/examples/jquery.tmpl.min.js"></script>
 		<script src="js/dataVis.js"></script>
 		<script src="js/script.js"></script>
-		<link rel="stylesheet" type="text/css" href="styles/data_vis_style.css">
 		<link rel="stylesheet" type="text/css" href="styles/style.css">
 
 		<script id="gameTemplate" type="text/x-jquery-tmpl"> 
@@ -55,31 +54,39 @@
 				</nav>
 				<h1 class="clear">GamExplorer</h1>
 				<p>At a loss for what game to play next? Try out this tool by inputting different games below to gain a new perspective on your tastes! As you add a new game, it is compared to all previous entries, by one of several factors. These so far include the gameplay genre, story themes, or mechnaical concepts featured in each game.</p>
-				<input class="controlInput" id="gameSearch" type="search" name="gameSearch">
-				<input class="controlInput" id="gameSearchSubmit" type="submit" value="Add Game">
+				<form name="searchForm">
+					<div id="searchWrapper">
+						<input class="controlInput" id="gameSearch" type="search" name="gameSearch">
+						<div id="searchLoading"></div>
+					</div>
+					<input class="controlInput" id="gameSearchSubmit" type="submit" value="Add Game">
+				</form>
+				
 				<div id="searchResultField"></div>
-				<select class="controlInput" id="sortType" name="sortOption">
-					<option>Genre</option>
-					<option>Themes</option>
-					<option>Concepts</option>
-				</select>
-				<select class="controlInput" id="displayType" name="sortOption">
-					<option>List</option>
-					<option>Chart</option>
-				</select>
-				<input class="controlInput" id="submitVal" type="submit" value="Display">
-				<div class="hidden">
-					<hr class="clear"/>
+				<form name="displayForm">
+					<select class="controlInput" id="sortType" name="sortOption">
+						<option>Genre</option>
+						<option>Themes</option>
+						<option>Concepts</option>
+					</select>
+					<select class="controlInput" id="displayType" name="sortOption">
+						<option>List</option>
+						<option>Chart</option>
+					</select>
+					<input class="controlInput" id="submitVal" type="submit" value="Display">
+				</form>
+				
+				<hr class="clear"/>
+				<div id="textResults" class="active">
 					<ul id="currentGamesField"></ul>
 					<ul id="currentSortField"></ul>
-					<!-- <div id="resultField"></div> -->
 				</div>
-				<hr/>
-				<div id='circle-chart-container'>
-					<div id="game-vis"></div>
+				<div id="chartResults">
+					<div id='circle-chart-container'>
+						<div id="game-vis"></div>
+					</div>
+					<div id='node-info' class='gia-popup'></div>
 				</div>
-				<div id='node-info' class='gia-popup'></div>
-
 				<p class="clear footerText" id="credits"><em>powered by the <a href="http://www.giantbomb.com/api">www.giantbomb.com/api</a></em></p>
 			</div>
 		</div>

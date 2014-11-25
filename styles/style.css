@@ -1,4 +1,5 @@
 @import url("http://fonts.googleapis.com/css?family=Oxygen:400,300,700");
+@import url("data_vis_style.css");
 .bgProperty, body {
   background-repeat: no-repeat;
   background-position: center;
@@ -103,12 +104,14 @@ hr {
       #wrapper nav .menuItem a:hover {
         cursor: pointer;
         border: 1px solid #10FFCB; }
-  #wrapper #searchResultField .returnList {
-    max-height: 100px;
-    overflow-x: hidden;
-    overflow-y: auto; }
-  #wrapper #searchResultField .searchResult:hover {
-    cursor: pointer; }
+  #wrapper #searchResultField {
+    clear: both; }
+    #wrapper #searchResultField .returnList {
+      max-height: 100px;
+      overflow-x: hidden;
+      overflow-y: auto; }
+    #wrapper #searchResultField .searchResult:hover {
+      cursor: pointer; }
   #wrapper .controlInput {
     background-color: #FF6350;
     font-size: .8em;
@@ -126,10 +129,32 @@ hr {
     background: url(../images/drop-down-arrow.png) no-repeat right #FF6350;
     background-size: auto 80%;
     padding-right: 6%; }
+  #wrapper div#searchWrapper {
+    position: relative;
+    display: inline-block;
+    width: 70%;
+    margin: 1em;
+    float: left; }
+    #wrapper div#searchWrapper #searchLoading {
+      width: 30px;
+      height: 30px;
+      pointer-events: none;
+      background: url(../images/loading.gif) no-repeat;
+      background-size: 30px;
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      opacity: 0; }
+    #wrapper div#searchWrapper .controlInput#gameSearch {
+      cursor: auto;
+      width: 70%;
+      width: 100%;
+      padding: 3% 2%;
+      margin: 0; }
+      #wrapper div#searchWrapper .controlInput#gameSearch::-webkit-search-decoration, #wrapper div#searchWrapper .controlInput#gameSearch::-webkit-search-cancel-button, #wrapper div#searchWrapper .controlInput#gameSearch::-webkit-search-results-button, #wrapper div#searchWrapper .controlInput#gameSearch::-webkit-search-results-decoration {
+        display: none; }
   #wrapper .controlInput#gameField {
     width: 30%; }
-  #wrapper .controlInput#gameSearch {
-    width: 70%; }
   #wrapper .controlInput#gameSearchSubmit {
     width: 20%;
     float: right; }
@@ -160,6 +185,15 @@ hr {
       color: black; }
       #wrapper #currentSortField .sortResultItem.active {
         color: #10FFCB; }
+  #wrapper ._results, #wrapper #textResults, #wrapper #chartResults {
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height .5s;
+    -webkit-transition: max-height .5s;
+    -moz-transition: max-height .5s;
+    -ms-transition: max-height .5s; }
+    #wrapper ._results.active, #wrapper .active#textResults, #wrapper .active#chartResults {
+      max-height: 1000px; }
 
 @media screen and (max-width: 768px) {
   #wrapper {
