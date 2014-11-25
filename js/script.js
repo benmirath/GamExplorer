@@ -209,6 +209,7 @@ function requestGameDataSearch () {
 	$.ajax({
 		url : myURL,
 		crossDomain : true,
+		dataType : "jsonp",
 		xhrFields : {
 			withCredentials : true
 		},
@@ -237,6 +238,7 @@ function requestGameDataSingle (target) {
 	$.ajax({
 		url : myURL,
 		crossDomain : true,
+		dataType : "jsonp",
 		xhrFields : {
 			withCredentials : true
 		},
@@ -259,6 +261,7 @@ function requestGameDataSingleId (id) {
 	$.ajax({
 		url : myURL,
 		crossDomain : true,
+		dataType : "jsonp",
 		xhrFields : {
 			withCredentials : true
 		},
