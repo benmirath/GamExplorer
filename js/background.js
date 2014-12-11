@@ -1,10 +1,16 @@
 var images = [
 	"hyper_light_drifter.gif",
 	"journey.gif",
-	"metal_gear_rising.gif",
 	"pacman.gif",
 	"pong.gif",
-	"zelda_link_to_the_past.gif"
+	"asteroids.gif",
+	"darkSouls.gif",
+	"dearEsther.gif",
+	"ff7.gif",
+	"flower.gif",
+	"metroid1.gif",
+	"mm2.gif",
+	"superMetroid.gif"
 ];
 cachedImage = 0;
 

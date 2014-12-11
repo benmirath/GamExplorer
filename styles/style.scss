@@ -2,11 +2,18 @@
 @import url("data_vis_style.css");
 
 $mainFont: "Inconsolata", helvetica, sans-serif;
-$primaryColor : #10FFCB;
-$secondaryColor : #2195CC;
-$highlightColor : #FF6350;
-$wrapperWidthDesktop : 70%;
-$wrapperWidthTablet : 80%;
+
+$primaryColor : #00A8C6;
+$primaryColorAlt : #40C0CB;
+
+$secondaryColor : #AEE239;
+$secondaryColorAlt : #8FBE00;
+
+$highlightColor : #8FBE00;
+$highlightColorAlt : #8FBE00;
+
+$wrapperWidthDesktop : 60%;
+$wrapperWidthTablet : 90%;
 $wrapperWidthPhone : 95%;
 $marginSize : 2%;
 
@@ -14,7 +21,7 @@ $marginSize : 2%;
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover; -webkit-background-size: cover;
-	background-attachment: fixed;	
+	background-attachment: fixed;
 }
 
 * {
@@ -63,30 +70,48 @@ hr {
 		margin: 2%;
 	}
 }
+svg{
+	.circle-text {
+		font-size: 16px;
+		width: 200px;
+
+	}	
+	width: 100%;
+	height: 100%;
+	min-height: 200px;
+}
+
 
 #wrapper {
-	max-width: 60%;
+	position: relative;
+	max-width: $wrapperWidthDesktop;
 	height: auto;
 	margin: 0 auto;
-	background-color: rgba(255,255,255, 0.7);
+	background-color: rgba(249,242,231, 0.9);
 
 	// GENERAL STYLING
 	h1 {
 		margin: $marginSize;
 		margin-top: 50px;
-		color: $secondaryColor;
+		color: $primaryColor;
 		font-size: 2em;
 	}
 	h2 {
 		margin-left: 2%;
+		font-size: .8em;
 	}
-	>p {
+	&>p {
 		margin: $marginSize;
 	}
-	>p#credits {
+	&>p#credits {
 		font-size: .5em;
 		padding-top: 20px;
 		padding-bottom: 20px;
+	}
+
+	&.about p,
+	&.about a, {
+		font-size: 1em;
 	}
 	ul {
 		list-style: none;
@@ -106,8 +131,8 @@ hr {
 	// NAV STYLING
 	nav {
 		padding: 2%;
-		background-color: $secondaryColor;
-		border-bottom: 4px solid $primaryColor;
+		background-color: $primaryColor;
+		border-bottom: 4px solid $secondaryColor;
 
 		h1 {
 			color: $highlightColor;
@@ -127,8 +152,8 @@ hr {
 				padding: .5em 1em;
 				border-radius: 5px;  
 				box-shadow: 1px 1px 2px silver;
-				background-color: $highlightColor;  
-				border: 1px solid $highlightColor;
+				background-color: $secondaryColor;  
+				// border: 1px solid $secondaryColor;
 				color: white;  
 				text-decoration: none;  
 				
@@ -136,7 +161,8 @@ hr {
 			}
 			a:hover {
 				cursor: pointer;  
-				border: 1px solid $primaryColor;
+				background-color: $secondaryColorAlt;  
+				// border: 1px solid $secondaryColorAlt;
 			}
 		}
 	}
@@ -151,15 +177,32 @@ hr {
 		}
 
 		.searchResult {
+			float: left;
+			clear:both;
+			font-size: .95em;
 			&:hover {
 				cursor: pointer;
 			}
+		}
+
+		.platform {
+			float:right;
+			text-align:right;
+			margin: 0;
+			padding: 0;
+			width: 45%;
+			height: 18px;
+			font-size: .8em;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+
 		}
 	}
 
 	// INPUT FIELDS
 	.controlInput {
-		background-color: #FF6350;
+		background-color: $primaryColor;
 		font-size: .8em;
 		padding: 2%;
 		margin: 2%;
@@ -175,7 +218,7 @@ hr {
 	}
 
 	select.controlInput {
-		background: url(../images/drop-down-arrow.png) no-repeat right #FF6350;
+		background: url(../images/drop-down-arrow.png) no-repeat right $primaryColor;
 		background-size: auto 80%;
 		padding-right: 6%;
 	}
@@ -183,8 +226,8 @@ hr {
 	div#searchWrapper {
 		position: relative;
 		display:inline-block;
-		width: 70%;
-		margin: 1em;
+		width: 68%;
+		margin: 2%;
 		float: left;
 
 		#searchLoading {
@@ -217,20 +260,22 @@ hr {
 	}
 	
 	.controlInput#gameSearchSubmit {
-		width: 20%;
+		width: 23%;
 		float: right;
 	}
 	.controlInput#displayType {
-		width: 29%;
+		// width: 29%;
+		width: 46%;
+		float:left;
 	}
 	.controlInput#sortType {
-		width: 29%;
+		// width: 29%;
+		width: 46%;
+		float:right;
 	}
-	.controlInput#submitVal {
-		width: 29%;
-		float: right;
+	.controlInput#sortType_example {
+		width: 95%;
 	}
-
 	._resultField {
 		margin: 2%;
 		width: 42%;
@@ -266,7 +311,6 @@ hr {
 			}	
 		}
 	}
-
 	._results {
 		max-height: 0px;
 		overflow: hidden;
@@ -275,7 +319,7 @@ hr {
 		-moz-transition: max-height .5s;
 		-ms-transition: max-height .5s;
 		&.active {
-			max-height: 1000px;
+			max-height: 100000px;
 		}
 	}
 	#textResults {
@@ -287,49 +331,121 @@ hr {
 }
 
 // Tablet
-@media screen  and (max-width : 768px) {
+@media screen  and (max-device-width : 768px) {
 	#wrapper {
-		max-width: 80%;
+		max-width: $wrapperWidthTablet;
 
 		nav .menuItem a,
 		.controlInput {
 			font-size: .9em;
 		}
+
+		#searchLoading {
+			width: 20px;
+			height: 20px;
+			background-size: 20px;
+			right: 8px;
+			top: 8px;
+		}
+
 		.controlInput#gameField {
 			width: 40%;
 		}
-		.controlInput#displayType {
-			width: 20%;
+
+		#node-info {
+			width: 125px;
 		}
-		.controlInput#sortType {
-			width: 20%;
-		}
-		.controlInput#submitVal {
+
+		.node-label {
 			width: 40%;
+			float: left;
+			font-size: 10px;
+			line-height: 11px;
+			font-family: Arial;
+			font-weight: bold;
+		}
+
+		.node-data, .node-data-short, .node-data-full, .node-data-wide {
+			width: 60%;
+			float: left;
+			font-family: Arial;
+			font-weight: normal;
+			font-size: 10px;
+			line-height: 11px;
+			text-align: left;
+		}
+
+		.node-list-item {
+			width: 100%;
+			float: left;
+			font-size: 9px;
 		}
 	}
 }
+
 // Phones
-@media screen  and (max-width : 480px) {
+@media screen 
+	and (min-device-width : 320px)  
+	and (max-device-width : 480px) 
+{	
 	#wrapper {
-		max-width: 95%;
+		max-width: $wrapperWidthPhone;
+
+		h1 {
+			font-size:1.5em;
+		}
 
 		nav .menuItem a,
 		.controlInput {
-			font-size: .7em;
+			font-size: .6em;
 		}	
+
+		div#searchWrapper #searchLoading {
+			width: 17px;
+			height: 17px;
+			background-size: 17px;
+			right: 5px;
+			top: 5px;
+		}
 
 		.controlInput#gameField {
 			width: 95%;
 		}	
-		.controlInput#displayType {
-			width: 45%;
+		svg{
+			.circle-text {
+				font-size: 30px;
+			}	
+			min-height: 250px;
+			height: 250px;
 		}
-		.controlInput#sortType {
-			width: 45%;
+
+		#node-info {
+			width: 75px;
 		}
-		.controlInput#submitVal {
-			width: 45%;
+
+		.node-label {
+			width: 40%;
+			float: left;
+			font-size: 8px;
+			line-height: 11px;
+			font-family: Arial;
+			font-weight: bold;
+		}
+
+		.node-data, .node-data-short, .node-data-full, .node-data-wide {
+			width: 60%;
+			float: left;
+			font-family: Arial;
+			font-weight: normal;
+			font-size: 8px;
+			line-height: 11px;
+			text-align: left;
+		}
+
+		.node-list-item {
+			width: 100%;
+			float: left;
+			font-size: 6px;
 		}
 	}
 }

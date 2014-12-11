@@ -3,16 +3,45 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="description" content="GamExplorer, expand your library" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     	<meta name="author" content="Ben Miller" />
 		<title>GamExplorer</title>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
-		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<!-- <script src="http://d3js.org/d3.v3.min.js"></script> -->
+		<script src="js/libs/d3.min.js"></script>
 		<script src="js/libs/underscore.min.js"></script>
 		<script src="js/background.js"></script>
-		<!--<script src="js/dataVis.js"></script>-->
-		<script src="js/script.js"></script>
+		<script src="js/examples/jquery.tmpl.min.js"></script>
+		<script src="data/top2013.js"></script>
+		<script src="data/top2012.js"></script>
+		<script src="js/dataVis.js"></script>
+		<script src="js/indexScript.js"></script>
+		<script src="js/exampleScript.js"></script>
 		<link rel="stylesheet" type="text/css" href="styles/style.css">
+
+		<script id="gameTemplate" type="text/x-jquery-tmpl"> 
+			<div id='node-name'>${name}</div>
+			<div class='node-topic' id='node-topic-references'>	
+				<div class='node-label'>Content</div>
+				<div class='node-data'>${content}</div>
+			</div>
+		</script>
+		<script id="weaponTopicTemplate" type="text/x-jquery-tmpl"> 
+			<div class='node-topic-tags' id='node-tags'>	
+				<div class='node-data-color' style='background-color: ${color};'></div>
+				<div class='node-data-wide'>${count} content that includes ${name}</div>
+			</div>
+		</script>
+		<script id="weaponTemplate" type="text/x-jquery-tmpl"> 
+			<div class='node-topic-tags' id='node-tags'>	
+				<div class='node-data-color' style='background-color: ${color};'></div>
+				<div class='node-data-wide'>${count} games use ${name}</div>
+			</div>
+		</script>
+		<script id="listTemplate" type="text/x-jquery-tmpl"> 
+			<div class='node-list-item'>${item}</div>	
+		</script>
 	</head>
 	<body>
 		<div id="filter">
@@ -24,9 +53,24 @@
 				</nav>
 				<h1 class="clear">Examples</h1>
 				<p>
-					Below are some examples using specific data, with small modifications for efficacy's sake.
+					Below are some example comparisons you can build.
 				</p>
-				<p class="clear" id="credits"><em>powered by the <a href="http://www.giantbomb.com/api">www.giantbomb.com/api</a></em></p>
+				<form name="displayForm">
+					<select class="controlInput" id="sortType_example" name="sortOption">
+						<option>Genre</option>
+						<option>Themes</option>
+					</select>
+				</form>
+				<div id="chartResults" class="active"></div>
+				<h1>Top Games of 2013</h1>
+				<div id='chart_2013'>
+					<div id="game-vis-2013"></div>
+				</div>
+				<h1>Top Games of 2012</h1>
+				<div id='chart_2012'>
+					<div id="game-vis-2012"></div>
+				</div>
+				<div id='node-info' class='gia-popup'></div>
 			</div>
 		</div>
 	</body>

@@ -3,18 +3,18 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="description" content="GamExplorer, expand your library" />
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
     	<meta name="author" content="Ben Miller" />
 		<title>GamExplorer</title>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
-		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<!-- <script src="http://d3js.org/d3.v3.min.js"></script> -->
+		<script src="js/libs/d3.min.js"></script>
 		<script src="js/libs/underscore.min.js"></script>
 		<script src="js/background.js"></script>
-		<!-- TEMP Tabletop script -->
-		<script src="js/examples/tabletop.js"></script>
 		<script src="js/examples/jquery.tmpl.min.js"></script>
 		<script src="js/dataVis.js"></script>
-		<script src="js/script.js"></script>
+		<script src="js/indexScript.js"></script>
 		<link rel="stylesheet" type="text/css" href="styles/style.css">
 
 		<script id="gameTemplate" type="text/x-jquery-tmpl"> 
@@ -24,21 +24,18 @@
 				<div class='node-data'>${content}</div>
 			</div>
 		</script>
-			
 		<script id="weaponTopicTemplate" type="text/x-jquery-tmpl"> 
 			<div class='node-topic-tags' id='node-tags'>	
 				<div class='node-data-color' style='background-color: ${color};'></div>
 				<div class='node-data-wide'>${count} content that includes ${name}</div>
 			</div>
 		</script>
-		
 		<script id="weaponTemplate" type="text/x-jquery-tmpl"> 
 			<div class='node-topic-tags' id='node-tags'>	
 				<div class='node-data-color' style='background-color: ${color};'></div>
 				<div class='node-data-wide'>${count} games use ${name}</div>
 			</div>
 		</script>
-		
 		<script id="listTemplate" type="text/x-jquery-tmpl"> 
 			<div class='node-list-item'>${item}</div>	
 		</script>
@@ -53,7 +50,7 @@
 					<div class="menuItem"><a href="about.html">About</a></div>				
 				</nav>
 				<h1 class="clear">GamExplorer</h1>
-				<p>At a loss for what game to play next? Try out this tool by inputting different games below to gain a new perspective on your tastes! As you add a new game, it is compared to all previous entries, by one of several factors. These so far include the gameplay genre, story themes, or mechnaical concepts featured in each game.</p>
+				<p>Search for a favorite game to start building your list! Check out the comparisons between your games, either as text or a data visualization!</p>
 				<form name="searchForm">
 					<div id="searchWrapper">
 						<input class="controlInput" id="gameSearch" type="search" name="gameSearch">
@@ -67,13 +64,11 @@
 					<select class="controlInput" id="sortType" name="sortOption">
 						<option>Genre</option>
 						<option>Themes</option>
-						<option>Concepts</option>
 					</select>
 					<select class="controlInput" id="displayType" name="sortOption">
 						<option>List</option>
 						<option>Chart</option>
 					</select>
-					<input class="controlInput" id="submitVal" type="submit" value="Display">
 				</form>
 				
 				<hr class="clear"/>
@@ -87,7 +82,6 @@
 					</div>
 					<div id='node-info' class='gia-popup'></div>
 				</div>
-				<p class="clear footerText" id="credits"><em>powered by the <a href="http://www.giantbomb.com/api">www.giantbomb.com/api</a></em></p>
 			</div>
 		</div>
 	</body>

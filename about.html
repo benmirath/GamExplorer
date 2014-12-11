@@ -3,20 +3,46 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="description" content="GamExplorer, expand your library" />
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"/>
     	<meta name="author" content="Ben Miller" />
 		<title>GamExplorer</title>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
-		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<!-- <script src="http://d3js.org/d3.v3.min.js"></script> -->
+		<script src="js/libs/d3.min.js"></script>
 		<script src="js/libs/underscore.min.js"></script>
 		<script src="js/background.js"></script>
-		<!--<script src="js/dataVis.js"></script>-->
-		<script src="js/script.js"></script>
+		<script src="js/examples/jquery.tmpl.min.js"></script>
+		<script src="js/dataVis.js"></script>
+		<script src="js/indexScript.js"></script>
 		<link rel="stylesheet" type="text/css" href="styles/style.css">
+
+		<script id="gameTemplate" type="text/x-jquery-tmpl"> 
+			<div id='node-name'>${name}</div>
+			<div class='node-topic' id='node-topic-references'>	
+				<div class='node-label'>Content</div>
+				<div class='node-data'>${content}</div>
+			</div>
+		</script>
+		<script id="weaponTopicTemplate" type="text/x-jquery-tmpl"> 
+			<div class='node-topic-tags' id='node-tags'>	
+				<div class='node-data-color' style='background-color: ${color};'></div>
+				<div class='node-data-wide'>${count} content that includes ${name}</div>
+			</div>
+		</script>
+		<script id="weaponTemplate" type="text/x-jquery-tmpl"> 
+			<div class='node-topic-tags' id='node-tags'>	
+				<div class='node-data-color' style='background-color: ${color};'></div>
+				<div class='node-data-wide'>${count} games use ${name}</div>
+			</div>
+		</script>
+		<script id="listTemplate" type="text/x-jquery-tmpl"> 
+			<div class='node-list-item'>${item}</div>	
+		</script>
 	</head>
 	<body>
 		<div id="filter">
-			<div id="wrapper">
+			<div id="wrapper" class="about">
 				<nav>
 					<div class="menuItem"><a href="index.html">GamExplorer</a></div>
 					<div class="menuItem"><a href="examples.html">Examples</a></div>
@@ -24,13 +50,13 @@
 				</nav>
 				<h1 class="clear">About</h1>
 				<p>
-					This site has been made in an effort to help connect gaming enthusiasts with the sort of interactive experience that excites them. The user can accomplish this through two different methods:
+					Ever been curious about what kind of games you like? The GamExplorer helps you discover the similarities between your favorite video games. 
+					This site has been made in an effort to help connect gaming enthusiasts with the sort of interactive experience that excites them. The user can accomplish this through two different methods of displaying the info they search for, a text-based list view and a more visually oriented chart.
 				</p>
-				<ul>
-					<li><span class="textHighlight">List View</span> - A text list of games is generated from a conceptual start point, which could be a concept, theme, or genre from a previous favorite.</li>
-					<li><span class="textHighlight">Chart View</span> - A visualization of top games, mapped to a start point, which could be a concept, theme, or genre from a previous favorite.</li>
-				</ul>
-				<p class="clear footerText" id="credits"><em>powered by the <a href="http://www.giantbomb.com/api">www.giantbomb.com/api</a></em></p>
+				<p>
+					This tool was in part inspired by the <a href="http://www.theguardian.com/world/interactive/2013/apr/30/violence-guns-best-selling-video-games">Guardian article on Gun Violence in top selling games</a>.
+				</p>
+				<p class="clear footerText" id="credits"><em>powered by the <a href="http://www.giantbomb.com/api">www.giantbomb.com/api</a>, the <a href="http://d3js.org">D3.js</a>, <a href="http://underscorejs.org">Underscore.js</a>, and <a href="http://jquery.com">jQuery</a> libraries.</em></p>
 			</div>
 		</div>
 	</body>

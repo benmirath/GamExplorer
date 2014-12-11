@@ -1,44 +1,67 @@
-var map = {
-	 "name": "",
-	 "children": []
-};
+//Modified from the guardian article found at this url:
+//http://www.theguardian.com/world/interactive/2013/apr/30/violence-guns-best-selling-video-games
 
-var gwlinks = [],
-	wtlinks = [],
-	gtlinks = [];
+var app = app || {};
+app.dataVisObject = function () {
+	this.target = "#id",
+	this.cluster = {},
+	this.svg = {},
+	this.svgDefs = {},
+	this.bundle = {},
 
+	this.data = {},
+	this.map = {
+		"name" : "",
+		"children" : []
+	},
+	this.gtlinks = [],
+	this.resetMap = function () {
+		this.map = {
+			 "name": "",
+			 "children": []
+		};
+		this.gtlinks = [];
+	},
+	this.init = function () {
+		this.resetMap();
+		$(this.target).empty();
+		this.cluster = d3.layout.cluster()
+			.size([360, innerRadius])
+			.sort(function(a, b) { 
+				var valueA = a.size * 100
+				var valueB = b.size * 100
+				
+				var charA = a.name.toLowerCase().charCodeAt(0)
+				var charB = b.name.toLowerCase().charCodeAt(0)
+				
+				if(a.nodeType == 'game'){
+					return d3.descending(valueA, valueB);
+				} else {
+					return d3.descending(valueB - charB, valueA - charA); 
+				}
+			})
+		    .value(function(d) { return d.size; });
+		
+		this.bundle = d3.layout.bundle();
+
+		this.svg = d3.select(this.target).append("svg")
+	    	.attr("viewBox", "0 0 999 980")
+	    	.attr("preserveAspectRatio", "xMidYMid meet")
+	  	  .append("g")
+	    	.attr("transform", "translate(" + (radius) + "," + (radius) + ")");
+
+	   	this.svgDefs = this.svg.append("svg:defs");
+	},
+	this.setData = function (_data) {
+		data = _data;
+	}
+}
+
+//General data vis settings
 var diameter = 640,
     radius = 940 / 2,
     innerRadius = radius - 270,
 	circlew = 940;
-
-
-var cluster = d3.layout.cluster()
-    .size([360, innerRadius])
-	.sort(function(a, b) { 
-		
-		var valueA = a.size * 100
-		var valueB = b.size * 100
-		
-		var charA = a.name.toLowerCase().charCodeAt(0)
-		var charB = b.name.toLowerCase().charCodeAt(0)
-		
-		if(a.nodeType == 'game'){
-			return d3.descending(valueA, valueB);
-		} else {
-			return d3.descending(valueB - charB, valueA - charA); 
-		}
-	})
-    .value(function(d) { return d.size; });
-
-var bundle = d3.layout.bundle();
-var svg = d3.select("#game-vis").append("svg")
-    	.attr("width", $('#wrapper').outerWidth())
-    	.attr("height", diameter+240)
-  	  .append("g")
-    	.attr("transform", "translate(" + (radius) + "," + (radius) + ")");
-
-var svgDefs = svg.append("svg:defs")  
 
 var line = d3.svg.line.radial()
     .interpolate("bundle")
@@ -51,163 +74,17 @@ var maxGamesToTopics = 0,
 	totalGames = 50;
 var gradientCounter = 0;
 
-function setSVG () {
-	$('#game-vis').empty();
-	svg = {};
-	svg = d3.select("#game-vis").append("svg")
-    	.attr("width", $('#wrapper').outerWidth())
-    	.attr("height", diameter+240)
-  	  .append("g")
-    	.attr("transform", "translate(" + (radius) + "," + (radius) + ")")
-
-    svgDefs = svg.append("svg:defs");
-    map = {
-		"name": "",
-		"children": []
-	};
-	gwlinks = [];
-	wtlinks = [];
-	gtlinks = [];
-}
-
-function processGuardianData () {
-	Tabletop.init( { key: '0ArF9tD_naD7edHIyOEE3endKbzZmZExTdWVoT0xTTmc', callback: processDataOriginal, simpleSheet: true } );
-}
-function processDataOriginal(data){
-	setSVG();
-	var gameRootNode = {
-		name: 'games',
-		children: []
-	}
-	var weaponRootNode = {
-		name: 'games',
-		children: []
-	}
-	var contentRootNode = {
-		name: 'games',
-		children: []
-	}
-
-	var games = {},
-		topics = {},
-		gameNodes = [],
-		weaponNodes = [],
-		topicNodes = []
-	
-
-	for(var d = 0; d < totalGames; d++){
-
-
-		games[ data[d]['name'] ] = {
-			name: data[d]['name'],
-			className: getClassName(data[d]['name']),
-			children: [],
-			size: Number(data[d]['sales']),
-
-			numTopics: 0,
-			topics: [],
-			nodeType: 'game',
-
-			connectedNodes: [],
-			gameRating: data[d]['rating'],
-			violenceLink: '',
-			weaponLink: '',
-			ratingLink: data[d]['rating'],
-			weaponConnections:{'guns': [], 'noguns': []},
-			topicConnections: {'violence': [], 'noviolence': []}
-		}
-		
-		var contentTags = ( data[d]['contentdescripters'] != '' ) ? data[d]['contentdescripters'].split(', '): [];	
-		if( contentTags.length > 0){
-			var includeGameContent = false
-			
-			games[ data[d]['name'] ]['numTopics'] = contentTags.length;
-			contentTags.forEach(function(t){
-				// console.log(t);
-				if( !topics[ t ] ){
-					topics[t] = {
-						name: t,
-						className: getClassName(t),
-						children: [],
-						size: 0,
-						numGames: 0,
-						games: [],
-						nodeType: 'topic',
-						connectedNodes: [],
-						barLinks: {},
-						violenceLink: ''
-					}
-				}
-
-				gtlinks.push({
-					type: 'game-topic-link',
-					source: games[ data[d]['name'] ],
-					target: topics[t]
-				})
-				topics[t]['size'] ++;
-				topics[t]['numGames'] ++;
-				
-				topics[t]['connectedNodes'].push(games[ data[d]['name'] ]['className']);
-				topics[t]['games'].push(games[ data[d]['name'] ]['name']);
-				games[ data[d]['name'] ]['connectedNodes'].push(topics[t]['className']);		
-				games[ data[d]['name'] ]['topics'].push(topics[t]['name']);
-				
-				if(t == 'Intense Violence' || t == 'Blood and Gore' || t == 'Violence' || t == 'Blood' || t == 'Cartoon Violence'  ){
-					includeGameContent = true;
-					topics[t]['violenceLink'] = topics[t]['barLinks']['violence'] = 'violence'
-					games[ data[d]['name'] ]['topicConnections']['violence'].push(topics[t])
-				} else {
-					topics[t]['violenceLink'] = topics[t]['barLinks']['violence'] = 'noviolence'
-					games[ data[d]['name'] ]['topicConnections']['noviolence'].push(topics[t])
-				}
-				
-			})
-			
-		} else {
-			games[ data[d]['name'] ]['violenceLink'] = 'noviolence'
-		}
-	}
-
-	for(var g in games){
-		gameRootNode.children.push(games[g])
-		if(games[g]['numTopics'] > maxGamesToTopics){
-			maxGamesToTopics = games[g]['numTopics'];
-		}		
-	}
-	for(var t in topics){
-		contentRootNode.children.push(topics[t])
-		if(topics[t]['numGames'] > maxTopicsToGames){
-			maxTopicsToGames = topics[t]['numGames'];
-		}
-	}
-	
-	maxGameTopics = maxGamesToTopics
-	if( maxTopicsToGames > maxGameTopics){
-		maxGameTopics = maxTopicsToGames;
-	}
-		
-	map.children.push(gameRootNode)
-	map.children.push(weaponRootNode)
-	map.children.push(contentRootNode)
-	
-	drawChart();
-}
-
-
 var sort_type = {
 	GENRE : "Genre",
 	THEME : "Theme",
 	CONCEPT : "Concept"
 };
-function processData(data, type){
-	setSVG();
-	var totalGames = data.length;
 
+function processData(_dataObj, _data, _type){
+	_dataObj.init();
+	console.log("log1");
+	var totalGames = _data.length;
 	var gameRootNode = {
-		name: 'games',
-		children: []
-	}
-	var weaponRootNode = {
 		name: 'games',
 		children: []
 	}
@@ -219,52 +96,50 @@ function processData(data, type){
 	var games = {},
 		topics = {},
 		gameNodes = [],
-		weaponNodes = [],
 		topicNodes = []
-	
+
+	console.log(_type);
+	console.log(sort_type.GENRE);
+	console.log(sort_type.THEME);
 
 	for(var d = 0; d < totalGames; d++){
-
 		var contentTags;
-
-		switch (type) {
-			case sort_type.GENRE:
-				contentTags = data[d].genres;
+		switch (_type) {
+			default:
+			case "Genre":
+				console.log("genre");
+				contentTags = _data[d].genres || [];
 				break;
-			case sort_type.THEME:
-				contentTags = data[d].themes;
+			case "Themes":
+				console.log("theme");
+				contentTags = _data[d].themes || [];
 				break;
-			case sort_type.CONCEPT:
-				contentTags = data[d].concepts;
+			case "Concepts":
+				console.log("concept");
+				contentTags = _data[d].concepts || [];
 				break;
 		}
-		console.log(contentTags);
-		console.log(contentTags.length);
 
-		games[ data[d]['name'] ] = {
-			name: data[d]['name'],
-			className: getClassName(data[d]['name'].toString()),
+		games[ _data[d]['name'] ] = {
+			name: _data[d]['name'],
+			className: getClassName(_data[d]['name'].toString()),
 			children: [],
-			// size: Number(data[d]['sales']),
 			size : contentTags.length,
 			numTopics: 0,
 			topics: [],
 			nodeType: 'game',
 
 			connectedNodes: [],
-			// gameRating: data[d]['rating'],
 			violenceLink: '',
 			weaponLink: '',
-			// ratingLink: data[d]['rating'],
-			// weaponConnections:{'guns': [], 'noguns': []},
-			topicConnections: {'violence': [], 'noviolence': []}
-		}
-		
+			topicConnections: {'violence': [], 'noviolence': []},
+			svg:_dataObj.svg
+		}		
 		
 		if( contentTags.length > 0){
 			var includeGameContent = false
 			
-			games[ data[d]['name'] ]['numTopics'] = contentTags.length;
+			games[ _data[d]['name'] ]['numTopics'] = contentTags.length;
 			contentTags.forEach(function(t){
 				
 				if( !topics[ t.name ] ){
@@ -278,36 +153,37 @@ function processData(data, type){
 						nodeType: 'topic',
 						connectedNodes: [],
 						barLinks: {},
-						violenceLink: ''
+						violenceLink: '',
+						svg:_dataObj.svg
 					}
 				}
 
-				gtlinks.push({
+				_dataObj.gtlinks.push({
 					type: 'game-topic-link',
-					source: games[ data[d]['name'] ],
+					source: games[ _data[d]['name'] ],
 					target: topics[t.name]
 				})
 				topics[t.name]['size'] ++;
 				topics[t.name]['numGames'] ++;
 				
-				topics[t.name]['connectedNodes'].push(games[ data[d]['name'] ]['className']);
-				topics[t.name]['games'].push(games[ data[d]['name'] ]['name']);
-				games[ data[d]['name'] ]['connectedNodes'].push(topics[t.name]['className']);		
-				games[ data[d]['name'] ]['topics'].push(topics[t.name]['name']);
+				topics[t.name]['connectedNodes'].push(games[ _data[d]['name'] ]['className']);
+				topics[t.name]['games'].push(games[ _data[d]['name'] ]['name']);
+				games[ _data[d]['name'] ]['connectedNodes'].push(topics[t.name]['className']);		
+				games[ _data[d]['name'] ]['topics'].push(topics[t.name]['name']);
 				
 				if(t.name == 'Intense Violence' || t.name == 'Blood and Gore' || t.name == 'Violence' || t.name == 'Blood' || t.name == 'Cartoon Violence'  ){
 					includeGameContent = true;
 					topics[t.name]['violenceLink'] = topics[t.name]['barLinks']['violence'] = 'violence'
-					games[ data[d]['name'] ]['topicConnections']['violence'].push(topics[t.name])
+					games[ _data[d]['name'] ]['topicConnections']['violence'].push(topics[t.name])
 				} else {
 					topics[t.name]['violenceLink'] = topics[t.name]['barLinks']['violence'] = 'noviolence'
-					games[ data[d]['name'] ]['topicConnections']['noviolence'].push(topics[t.name])
+					games[ _data[d]['name'] ]['topicConnections']['noviolence'].push(topics[t.name])
 				}
 				
 			})
 			
 		} else {
-			games[ data[d]['name'] ]['violenceLink'] = 'noviolence'
+			games[ _data[d]['name'] ]['violenceLink'] = 'noviolence'
 		}	
 	}
 
@@ -329,11 +205,10 @@ function processData(data, type){
 		maxGameTopics = maxTopicsToGames;
 	}
 		
-	map.children.push(gameRootNode)
-	map.children.push(weaponRootNode)
-	map.children.push(contentRootNode)
+	_dataObj.map.children.push(gameRootNode)
+	_dataObj.map.children.push(contentRootNode)
 	
-	drawChart();
+	drawChart(_dataObj);
 }
 
 function color(val){
@@ -351,18 +226,19 @@ function color(val){
 }
 
 
-function drawChart(){
-	
+function drawChart(_dataObj){
 	var barScale = d3.scale.linear()
 	    .domain([0,20])
 	    .range([0,50]);
 
-	var nodes = cluster.nodes(map)
+	var nodes = _dataObj.cluster.nodes(_dataObj.map)
 
-	svg.selectAll(".node-dot")
+	_dataObj.svg.selectAll(".node-dot")
       .data(nodes.filter(function(n) { return n.depth == 2; }))
     .enter().append("g")
-      .attr("transform", function(d) {console.log("node checks"); console.log(d);  return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
+      .attr("transform", function(d) {
+      	return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; 
+      })
     .append("circle")
 	  .attr('class', function(d){
 		return 'node-dot ' + 'nodedot-' + d.className 
@@ -375,20 +251,12 @@ function drawChart(){
 	  .on("mouseover", showConnections)
       .on("mouseout", hideConnections)
 	
-	svg.selectAll(".node")
+	_dataObj.svg.selectAll(".node")
       .data(nodes.filter(function(n) { return n.depth == 2; }))
     .enter().append("g")
 	  .attr("class", 'node')
       .attr("transform", function(d) { 
-	
-		var translatevalue = d.y + 5
-		if(d.nodeType == 'game'){
-			translatevalue += 10
-		} else {
-			translatevalue += barScale(d.size)
-		}
-		
-	
+		var translatevalue = d.y + 15
 		return "rotate(" + (d.x - 90) + ")translate(" + translatevalue + ")"; })
     .append("text")
       .attr("dx", function(d) { return d.x < 180 ? 0 : 0; })
@@ -418,28 +286,30 @@ function drawChart(){
 				} else if(d.nodeType == 'weapon' ) {
 					return '#CC2F27'
 				} else if( d.nodeType == 'topic'){
-					return '#3C602E'
+					return '#FF6350'
 				}
 	
 	  	   })
       .on("mouseover", showConnections)
       .on("mouseout", hideConnections)
+    
+
+    _dataObj.svg.selectAll(".node text")
+      .call(wrap, textWidth);
 
 	$('.node').mousemove(setPopupPosition);
 	$('.node-dot').mousemove(setPopupPosition);
 
 	
-	gameTopicsColor = d3.interpolateRgb("#ccc", '#3C602E');
+	gameTopicsColor = d3.interpolateRgb("#FF6350", '#CC2135');
 
 
 	gameTopicsScale = d3.scale.linear()
 	    				.domain([0,maxGameTopics])
 	    				.range([0,1]);
-		
-	var mergedLinks = gwlinks.concat(gtlinks)
 	
-	svg.selectAll(".links")
-		.data(bundle(mergedLinks))
+	_dataObj.svg.selectAll(".links")
+		.data(_dataObj.bundle(_dataObj.gtlinks))
 	.enter().append("path")
 		.attr("class", function(d){
 			var linkClass = 'links link-' + d[4]['className'] + ' link-' + d[0]['className']
@@ -449,10 +319,7 @@ function drawChart(){
 			var oLink = (d[4]['nodeType'] == 'game')? d[0] : d[4];
 			
 			linkClass += ' barlink-' + gLink['className'] + oLink['className']
-
-			linkClass += ' barlink-' + node['gameRating']
-			
-		
+			linkClass += ' barlink-' + node['gameRating']	
 			
 			return linkClass
 		})
@@ -463,22 +330,16 @@ function drawChart(){
 		.style("stroke", function(d){
 			var gradient;
 			if(d[4]['nodeType'] == 'topic' && d[0]['nodeType'] == 'game' ){
-				return 'url(#' + getGradient(d[4]['numGames'], d[0]['size'], 'topic', 'game') +')'
+				return 'url(#' + getGradient(_dataObj, d[4]['numGames'], d[0]['size'], 'topic', 'game') +')'
 			} else if(d[4]['nodeType'] == 'weapon' && d[0]['nodeType'] == 'game'){
-				return 'url(#' + getGradient(d[4]['numGames'], d[0]['size'], 'weapon', 'game') +')'
+				return 'url(#' + getGradient(_dataObj, d[4]['numGames'], d[0]['size'], 'weapon', 'game') +')'
 			}
 			
 			return'url(#' + gradient +')'
 		});
-		
-
-
 }
 
 function getClassName(title){
-// function getClassName(_title){
-	// var title = _title.toString();
-
 	var name = title.replace(/ /g,'')
 	name = name.replace(/\'/g,'')
 	name = name.replace(/\//g,'')
@@ -494,7 +355,10 @@ function setPopupPosition(e){
 	e = jQuery.event.fix(e);
 	mouseX = e.pageX; //- $('#gia-interactive').offset().left
 	mouseY = e.pageY;
-	mouseY += $('#filter').scrollTop();
+ 	var xOffset = $('#filter').width() - $('#wrapper').width();
+ 	mouseX -= (xOffset / 2) - 20;
+    mouseY += $('#filter').scrollTop();
+
 
 	$('.gia-popup').css({
 		top: mouseY,
@@ -505,32 +369,31 @@ function setPopupPosition(e){
 
 
 function showConnections(d) {
-
-	svg.selectAll('.circle-text')
+	d.svg.selectAll('.circle-text')
 		.classed('circle-text-dim', true);
 		
-	svg.select('#nodetext-' + d.className)
+	d.svg.select('#nodetext-' + d.className)
 		.classed('highlight', true)
 		.classed('circle-text-dim', false);
 	
-	svg.selectAll('.node-dot')
+	d.svg.selectAll('.node-dot')
 		.style("opacity", .01)
 	
-	svg.selectAll('path.links')
+	d.svg.selectAll('path.links')
 		.style("stroke-opacity", .01)
 	
-	svg.selectAll('path.link-' + d.className)
+	d.svg.selectAll('path.link-' + d.className)
 		.style("stroke-opacity",1)
 		
-	svg.selectAll('.nodedot-' + d.className)
+	d.svg.selectAll('.nodedot-' + d.className)
 		.style("opacity",1)
 
 	d.connectedNodes.forEach(function(n){
-		svg.select('#nodetext-' + n)
+		d.svg.select('#nodetext-' + n)
 			.classed('highlight', true)
 			.classed('circle-text-dim', false);
 			
-		svg.selectAll('.nodedot-' + n)
+		d.svg.selectAll('.nodedot-' + n)
 			.style("opacity", 1)	
 	})
 	
@@ -549,8 +412,6 @@ function showConnections(d) {
 			$("#listTemplate").tmpl( {item: t}).appendTo( "#node-topic-references .node-data" );
 		})
 	} else if( d.nodeType == 'topic'){
-		console.log("NODE TYPE");
-		console.log(d);
 		$("#weaponTopicTemplate").tmpl( {
 			name: (d.name.toLowerCase().search('use') >= 0)? 'the ' + d.name.toLowerCase() : d.name.toLowerCase(),
 			color: getColor(d.nodeType, d.size),
@@ -578,94 +439,66 @@ function getRating(rating){
 
 function hideConnections(d) {
 	$("#node-info").hide()
-	svg.selectAll('path.links')
+	d.svg.selectAll('path.links')
 		.style("stroke-opacity", 1);
 		
-	svg.selectAll('.circle-text')
+	d.svg.selectAll('.circle-text')
 		.classed('circle-text-dim', false)
 		.classed('highlight', false);
 		
-	svg.selectAll('.node-dot')
+	d.svg.selectAll('.node-dot')
 		.style("opacity", 1)		
 }
 
 
-function getGradient(startValue, endValue, topic1, topic2){
-
+function getGradient(_dataObj, startValue, endValue, topic1, topic2){
 	var gradientId = "gradient" + gradientCounter;
-
-	var gradient = svgDefs.append("svg:linearGradient")
+	var gradient = _dataObj.svgDefs.append("svg:linearGradient")
 		.attr("id", gradientId)
 	
 	gradient.append("svg:stop")
 	    .attr("offset", "10%")
-	    .attr("stop-color", getColor( topic1,startValue))
+	    .attr("stop-color", getColor( topic1, startValue))
 
 	gradient.append("svg:stop")
 	    .attr("offset", "90%")
-	    .attr("stop-color", getColor(topic2, endValue))
+	    .attr("stop-color", getColor( topic2, endValue))
 
 	gradientCounter++;
 	return gradientId;
 }
 
-
 function getColor(topic, value){
 	var color = '#ccc'
-	if(topic == 'game'){	
+	if (topic == 'game') {
 		if( value <= 1){
-			color = '#D7DEF7'
+			color = '#2195CC'
 		} else if( value > 1 && value <= 5){
-			color = '#8B9BD9'
+			color = '#1D82B2'
 		} else if( value > 5 && value <= 10){
-			color = '#5265AE'
-		} else if( value > 10 && value <= 15){
-			color = '#394B9F'
-		} else if( value > 15 ){
-			color = '#2C3878'
-		}	
-	}else if(topic == 'weapon'){
-
-		if( value <= 1){
-			color = '#FFE2DB'
-		} else if( value > 1 && value <= 5){
-			color = '#E88B78'
-		} else if( value > 5 && value <= 10){
-			color = '#CC2F27'
-		} else if( value > 10 && value <= 15){
-			color = '#871D1B'
-		} else if( value > 15 ){
-			color = '#5E0202'
+			color = '#17668C'
 		}
-	}else if(topic == 'topic'){
+	} else if (topic == 'topic') {
 		
 		if( value <= 1){
-			color = '#CEDBB4'
+			color = '#FF6350'
 		} else if( value > 1 && value <= 5){
-			color = '#9DB270'
+			color = '#FF2942'
 		} else if( value > 5 && value <= 10){
-			color = '#5E843A'
-		} else if( value > 10 && value <= 15){
-			color = '#3C602E'
-		} else if( value > 15 ){
-			color = '#1E3B13'
+			color = '#CC2135'
 		}
 	}
-	return color;	
+	return color;
 }
 
-function roundSales (n){
+function roundSales (n) {
 	var newN = n/100000;
 	newN = Math.round(newN)/10
-	
 	
 	return newN.toFixed(1) + ' m';
 }
 
-
-
-function addCommas(nStr)
-{
+function addCommas(nStr) {
 	nStr += '';
 	x = nStr.split('.');
 	x1 = x[0];
@@ -675,4 +508,31 @@ function addCommas(nStr)
 		x1 = x1.replace(rgx, '$1' + ',' + '$2');
 	}
 	return x1 + x2;
+}
+
+var textWidth = 220;
+function wrap(text, width) {
+	console.log("boop");
+	console.log(text);
+  text.each(function() {
+    var text = d3.select(this),
+        words = text.text().split(/\s+/).reverse(),
+        word,
+        line = [],
+        lineNumber = 0,
+        lineHeight = 1, // ems
+        y = text.attr("y"),
+        dy = parseFloat(text.attr("dy")),
+        tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", 0);
+    while (word = words.pop()) {
+      line.push(word);
+      tspan.text(line.join(" "));
+      if (tspan.node().getComputedTextLength() > width) {
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + "em").text(word);
+      }
+    }
+  });
 }
