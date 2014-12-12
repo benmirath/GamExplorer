@@ -222,7 +222,7 @@ svg {
     #wrapper ._results.active, #wrapper .active#textResults, #wrapper .active#chartResults {
       max-height: 100000px; }
 
-@media screen and (max-device-width: 768px) {
+@media screen and (max-width: 768px) {
   #wrapper {
     max-width: 90%; }
     #wrapper nav .menuItem a,
@@ -257,7 +257,7 @@ svg {
       width: 100%;
       float: left;
       font-size: 9px; } }
-@media screen and (min-device-width: 320px) and (max-device-width: 480px) {
+@media screen and (min-width: 320px) and (max-width: 480px) {
   #wrapper {
     max-width: 95%; }
     #wrapper h1 {
